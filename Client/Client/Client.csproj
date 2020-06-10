@@ -72,6 +72,9 @@
     <Compile Include="SetItems.xaml.cs">
       <DependentUpon>SetItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SetQuantity.xaml.cs">
+      <DependentUpon>SetQuantity.xaml</DependentUpon>
+    </Compile>
     <Page Include="DeleteDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +98,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SetItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetQuantity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

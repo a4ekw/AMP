@@ -393,12 +393,20 @@ namespace Client
 
         }
 
-        void ShowHideDetails(object sender, RoutedEventArgs e)
+        private async void Set_Items(object sender, RoutedEventArgs e)
         {
             try
             {
-                Data d = dataGrid2.SelectedItem as Data;
-                MessageBox.Show(d.Name);
+                Data data = dataGrid2.SelectedItem as Data;
+                SetItems setItems = new SetItems(data.Name);
+
+                if (setItems.ShowDialog() == true)
+                {
+                    foreach(Data d in setItems.ItemsList)
+                    {
+                        await client.SetTaskAsync("Out/Items/" + data.Id + "/", d);
+                    }
+                }
             }
             catch { }
         }

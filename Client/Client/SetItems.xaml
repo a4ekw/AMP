@@ -5,21 +5,81 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="SetItems" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        Title="SetItems" 
+        WindowStartupLocation="CenterScreen" Width="1248" Height="655" MinWidth="600" MinHeight="300" WindowStyle="None">
+
+    <Window.Resources>
+        <local:Colors x:Key="Colors"/>
+    </Window.Resources>
+
     <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="dataGridS" Margin="0,40,10,40"
+                  CanUserDeleteRows="False" CanUserAddRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
+                  MouseDoubleClick="dataGridS_MouseDoubleClick">
+            <DataGrid.Columns>
 
-        <TextBlock>Введите пароль:</TextBlock>
-        <TextBox Name="passwordBox" Grid.Row="1" MinWidth="250">Пароль</TextBox>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*" IsReadOnly="True"/>
 
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,0,0">
+                <DataGridTextColumn Header="Акутальный остаток" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.3*" IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="Background" Value="{Binding Now, Converter={StaticResource Colors}}"/>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="dataGridR" Margin="10,40,0,40"
+            CanUserDeleteRows="False" CanUserAddRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False" Grid.Column="1"
+                  MouseDoubleClick="dataGridR_MouseDoubleClick">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*" IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Норма" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.3*" IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="Background" Value="{Binding Now, Converter={StaticResource Colors}}"/>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <WrapPanel HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="1" Height="25" VerticalAlignment="Bottom">
             <Button IsDefault="True" Click="Accept_Click" MinWidth="60" Margin="0,0,10,0">OK</Button>
             <Button IsCancel="True" MinWidth="60">Отмена</Button>
         </WrapPanel>
-
+        <Label Name="labelS" Content="Доступная комплектация" Margin="0,10,10,0" VerticalAlignment="Top"/>
+        <Label Name="labelR" Grid.Column="1" Margin="10,10,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

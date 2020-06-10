@@ -7,7 +7,6 @@
         mc:Ignorable="d" Height="450" Width="800"
         WindowState="Maximized">
 
-
     <Window.Resources>
         <local:Colors x:Key="Colors"/>
     </Window.Resources>
@@ -22,15 +21,15 @@
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
                   RowEditEnding="dataGrid_RowEditEnding">
                         <DataGrid.Columns>
-                            
+
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*"/>
-                            
+
                             <DataGridTextColumn Header="Остаток до поступления" Binding="{Binding Old, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     </Style>
-                                </DataGridTextColumn.HeaderStyle>                                
+                                </DataGridTextColumn.HeaderStyle>
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="TextAlignment" Value="Center" />
@@ -89,7 +88,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -100,7 +99,7 @@
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
                   RowEditEnding="dataGrid_RowEditEnding">
                         <DataGrid.Columns>
-                            
+
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*"/>
 
                             <DataGridTextColumn Header="Остаток до поступления" Binding="{Binding Old, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
@@ -167,7 +166,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -178,7 +177,7 @@
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
                   RowEditEnding="dataGrid_RowEditEnding">
                         <DataGrid.Columns>
-                            
+
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*"/>
 
                             <DataGridTextColumn Header="Остаток до поступления" Binding="{Binding Old, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
@@ -249,11 +248,11 @@
                             <DataGridTemplateColumn  Header="Комплектация" Width="0.1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Click="ShowHideDetails">Изменить</Button>
+                                        <Button Click="Set_Items">Изменить</Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
