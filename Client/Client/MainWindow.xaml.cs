@@ -266,6 +266,8 @@ namespace Client
                     if (data.Name != null)
                         if (data.Id == null)
                         {
+                            if (pos == 2)
+                                data.cnt = "0";
                             Free_Place();
                             if (free.Count != 0)
                             {
@@ -398,13 +400,26 @@ namespace Client
             try
             {
                 Data data = dataGrid2.SelectedItem as Data;
-                SetItems setItems = new SetItems(data.Name);
+                SetItems setItems = new SetItems(data.Name, data.Id);
 
                 if (setItems.ShowDialog() == true)
                 {
-                    foreach(Data d in setItems.ItemsList)
+                    var items = new ItemsCount
                     {
-                        await client.SetTaskAsync("Out/Items/" + data.Id + "/", d);
+                        cnt = setItems.ItemsList.Count.ToString(),
+                    };
+
+                    await client.SetTaskAsync("Out/" + data.Id, items);
+                    await client.DeleteTaskAsync("Out/" + data.Id + "/Items/");
+
+                    for (int i = 0; i < setItems.ItemsList.Count; i++)
+                    {
+                        Data obj = setItems.ItemsList.ElementAt(i);
+                        obj.Name = null;
+                        obj.New = null;
+                        obj.All = null;
+                        obj.Old = null;
+                        await client.SetTaskAsync("Out/" + data.Id + "/Items/" + (i + 1), obj);
                     }
                 }
             }

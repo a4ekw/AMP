@@ -19,11 +19,11 @@ namespace Client
 {
     public partial class SetItems : Window
     {
-        string name;
-        Counter get = new Counter();
+        string name, id;
         List<Data> listS = new List<Data>();
         List<Data> listR = new List<Data>();
         List<DataC> listС = new List<DataC>();
+        List<ItemsR> listI = new List<ItemsR>();
 
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
@@ -32,13 +32,13 @@ namespace Client
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
-        public SetItems(string name)
+        public SetItems(string name, string id)
         {
             InitializeComponent();
             this.name = name;
+            this.id = id;
             client = new FireSharp.FirebaseClient(config);
-            dataGridR.ItemsSource = listR;
-            labelR.Content = "Комплектация \""+ name + "\"";
+            labelR.Content = "Комплектация \"" + name + "\"";
             Load();
         }
 
@@ -49,10 +49,11 @@ namespace Client
             {
                 listS.Clear();
                 listR.Clear();
-                dataGridS.Items.Refresh();
+                listС.Clear();
+                listI.Clear();
 
                 FirebaseResponse resp = await client.GetTaskAsync("Counter/node");
-                get = resp.ResultAs<Counter>();
+                Counter get = resp.ResultAs<Counter>();
 
                 int count = Convert.ToInt32(get.cnt);
                 if (count != 0)
@@ -66,8 +67,50 @@ namespace Client
                         }
                         catch { }
                     }
+
+                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + id);
+                ItemsCount getC = resp1.ResultAs<ItemsCount>();
+                count = Convert.ToInt32(getC.cnt);
+                if (count != 0)
+                {
+                    for (int i = 1; i <= count; i++)
+                    {
+                        try
+                        {
+                            FirebaseResponse response = await client.GetTaskAsync("Out/" + id + "/Items/" + i);
+                            ItemsR itemsR = response.ResultAs<ItemsR>();
+                            listI.Add(itemsR);
+                        }
+                        catch { }
+                    }
+
+                    int l = listS.Count;
+                    foreach (ItemsR item in listI)
+                        for (int i = 0; i < l; i++)
+                        {
+                            if (listS.ElementAt(i).Id == item.Id)
+                            {
+                                Data d = listS.ElementAt(i);
+                                DataC dataC = new DataC();
+                                dataC.Id = d.Id;
+                                dataC.Name = d.Name;
+                                dataC.Now = d.Now;
+                                listС.Add(dataC);
+                                listS.Remove(d);
+                                l--;
+                                d.Now = item.Now;
+                                listR.Add(d);
+                            }
+                        }
+                    labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
+                }
+
                 dataGridS.ItemsSource = null;
                 dataGridS.ItemsSource = listS;
+
+                dataGridR.ItemsSource = null;
+                dataGridR.ItemsSource = listR;
+
                 labelS.Content = "Доступная комплектация (" + listS.Count + " ед.)";
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -78,7 +121,7 @@ namespace Client
         }
 
         public List<Data> ItemsList
-        {            
+        {
             get { return listR; }
         }
 
