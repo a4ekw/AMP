@@ -22,3 +22,8 @@ D:\MP\Client\Client\obj\Release\Client.csproj.CopyComplete
 D:\MP\Client\Client\obj\Release\Client.exe
 D:\MP\Client\Client\obj\Release\Client.pdb
 D:\MP\Client\Client\obj\Release\Client.csprojAssemblyReference.cache
+D:\MP\Client\Client\obj\Release\SetItems.g.cs
+D:\MP\Client\Client\obj\Release\SetQuantity.g.cs
+D:\MP\Client\Client\obj\Release\GeneratedInternalTypeHelper.g.cs
+D:\MP\Client\Client\obj\Release\SetItems.baml
+D:\MP\Client\Client\obj\Release\SetQuantity.baml

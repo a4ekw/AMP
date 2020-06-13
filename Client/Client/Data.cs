@@ -8,6 +8,7 @@
         public string All { get; set; }
         public string Now { get; set; }
         public string New { get; set; }
+        public string Note { get; set; }
         public string cnt { get; set; }
     }
 }

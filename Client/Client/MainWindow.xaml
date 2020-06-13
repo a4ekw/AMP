@@ -15,7 +15,7 @@
         <Button Name="refresh" Content="Обновить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click_Refresh"/>
         <Button Name="delete" Content="Удалить" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_Delete"/>
         <TabControl x:Name="tab" RenderTransformOrigin="2.35,0.71" Margin="0,25,0,0" SelectionChanged="tab_SelectionChanged" Loaded="tab_Loaded">
-            <TabItem Header="Детали">
+            <TabItem Header="Материалы">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGrid"            
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
@@ -178,7 +178,7 @@
                   RowEditEnding="dataGrid_RowEditEnding">
                         <DataGrid.Columns>
 
-                            <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*"/>
+                            <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.6*"/>
 
                             <DataGridTextColumn Header="Остаток до поступления" Binding="{Binding Old, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
                                 <DataGridTextColumn.HeaderStyle>
@@ -241,6 +241,20 @@
                                                 <Setter Property="Background" Value="LightGray"/>
                                             </Trigger>
                                         </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+
+                            <DataGridTextColumn Header="Заметка" Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>

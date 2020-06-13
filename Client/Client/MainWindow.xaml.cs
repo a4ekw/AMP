@@ -16,6 +16,8 @@ namespace Client
         Counter get = new Counter();
         static List<int> free = new List<int>();
         static List<Data> list = new List<Data>();
+        static List<Data> listR = new List<Data>();
+        static List<ItemsR> listI = new List<ItemsR>();
         int pos = 0;
 
         IFirebaseClient client;
@@ -260,118 +262,181 @@ namespace Client
                 }
 
                 var data = e.Row.Item as Data;
-                if (data.New == null)
+                try
                 {
-
-                    if (data.Name != null)
-                        if (data.Id == null)
-                        {
-                            if (pos == 2)
-                                data.cnt = "0";
-                            Free_Place();
-                            if (free.Count != 0)
-                            {
-                                data.Id = free.ElementAt(0).ToString();
-                                await client.SetTaskAsync(path + free.ElementAt(0).ToString(), data);
-                                free.RemoveAt(0);
-                            }
-                            else
-                            {
-                                data.Id = value.ToString();
-                                await client.SetTaskAsync(path + value.ToString(), data);
-                                Counter obj = new Counter();
-                                switch (tab.SelectedIndex)
-                                {
-                                    case 0:
-                                        {
-                                            obj = new Counter
-                                            {
-                                                cnt = value.ToString(),
-                                                cntP = get.cntP,
-                                                cntO = get.cntO
-                                            };
-                                            break;
-                                        }
-                                    case 1:
-                                        {
-                                            obj = new Counter
-                                            {
-                                                cnt = get.cnt,
-                                                cntP = value.ToString(),
-                                                cntO = get.cntO
-                                            };
-                                            break;
-                                        }
-                                    case 2:
-                                        {
-                                            obj = new Counter
-                                            {
-                                                cnt = get.cnt,
-                                                cntP = get.cntP,
-                                                cntO = value.ToString()
-                                            };
-                                            break;
-                                        }
-
-                                }
-                                await client.SetTaskAsync("Counter/node", obj);
-                            }
-                        }
-                        else
-                        {
-                            await client.SetTaskAsync(path + data.Id, data);
-                        }
-                }
-                else
-                {
-                    try
+                    if (data.New == null)
                     {
+
                         if (data.Name != null)
-                        {
-                            int i = list.IndexOf(data);
-                            double all, now;
-                            if (data.All != null && data.All != " " && data.All != "")
-                                all = Convert.ToDouble(data.All);
-                            else
-                                all = 0;
+                            if (data.Id == null)
+                            {
+                                if (pos == 2)
+                                    data.cnt = "0";
+                                Free_Place();
+                                if (free.Count != 0)
+                                {
+                                    data.Id = free.ElementAt(0).ToString();
+                                    await client.SetTaskAsync(path + free.ElementAt(0).ToString(), data);
+                                    free.RemoveAt(0);
+                                }
+                                else
+                                {
+                                    data.Id = value.ToString();
+                                    await client.SetTaskAsync(path + value.ToString(), data);
+                                    Counter obj = new Counter();
+                                    switch (tab.SelectedIndex)
+                                    {
+                                        case 0:
+                                            {
+                                                obj = new Counter
+                                                {
+                                                    cnt = value.ToString(),
+                                                    cntP = get.cntP,
+                                                    cntO = get.cntO
+                                                };
+                                                break;
+                                            }
+                                        case 1:
+                                            {
+                                                obj = new Counter
+                                                {
+                                                    cnt = get.cnt,
+                                                    cntP = value.ToString(),
+                                                    cntO = get.cntO
+                                                };
+                                                break;
+                                            }
+                                        case 2:
+                                            {
+                                                obj = new Counter
+                                                {
+                                                    cnt = get.cnt,
+                                                    cntP = get.cntP,
+                                                    cntO = value.ToString()
+                                                };
+                                                break;
+                                            }
 
-                            if (data.Now != null && data.Now != " " && data.Now != "")
-                                now = Convert.ToDouble(data.Now);
+                                    }
+                                    await client.SetTaskAsync("Counter/node", obj);
+                                }
+                            }
                             else
-                                now = 0;
-
-                            data.All = (all + Convert.ToDouble(data.New)).ToString();
-                            data.Now = (now + Convert.ToDouble(data.New)).ToString();
-                            data.New = null;
-                            await client.SetTaskAsync(path + data.Id, data);
-                        }
-                        else
-                            data.New = null;
-                        switch (pos)
-                        {
-                            case 0:
-                                {
-                                    dataGrid.Items.Refresh();
-                                    break;
-                                }
-                            case 1:
-                                {
-                                    dataGrid1.Items.Refresh();
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    dataGrid2.Items.Refresh();
-                                    break;
-                                }
-                        }
+                            {
+                                await client.SetTaskAsync(path + data.Id, data);
+                            }
                     }
-                    catch
+                    else
                     {
-                        data.New = null;
-                        MessageBox.Show("Некорректность вводимых или хранимых данных.");
+                        try
+                        {
+                            if (data.Name != null)
+                            {
+                                int i = list.IndexOf(data);
+                                double all, now, newV;
+                                if (data.All != null && data.All != " " && data.All != "")
+                                    all = Convert.ToDouble(data.All);
+                                else
+                                    all = 0;
+
+                                if (data.Now != null && data.Now != " " && data.Now != "")
+                                    now = Convert.ToDouble(data.Now);
+                                else
+                                    now = 0;
+                                newV = Convert.ToDouble(data.New);
+
+                                if (pos == 2)
+                                {
+                                    listI.Clear();
+                                    listR.Clear();
+
+                                    FirebaseResponse res = await client.GetTaskAsync("Counter/node");
+                                    get = res.ResultAs<Counter>();
+
+                                    int count = Convert.ToInt32(get.cnt);
+                                    if (count != 0)
+                                        for (int j = 1; j <= count; j++)
+                                        {
+                                            try
+                                            {
+                                                FirebaseResponse response = await client.GetTaskAsync("Category/" + j);
+                                                Data data1 = response.ResultAs<Data>();
+                                                listR.Add(data1);
+                                            }
+                                            catch { }
+                                        }
+                                    FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + data.Id);
+                                    ItemsCount getC = resp1.ResultAs<ItemsCount>();
+
+                                    count = Convert.ToInt32(getC.cnt);
+                                    if (count != 0)
+                                    {
+                                        for (int j = 1; j <= count; j++)
+                                        {
+                                            try
+                                            {
+                                                FirebaseResponse response = await client.GetTaskAsync("Out/" + data.Id + "/Items/" + j);
+                                                ItemsR itemsR = response.ResultAs<ItemsR>();
+                                                listI.Add(itemsR);
+                                            }
+                                            catch { }
+                                        }
+                                    }
+                                    foreach (Data obj in listR)
+                                    {
+                                        foreach (ItemsR item in listI)
+                                        {
+                                            if (item.Id == obj.Id)
+                                            {
+                                                obj.Now = (
+                                                    Convert.ToDouble(obj.Now) - Convert.ToDouble(item.Now) * newV
+                                                    ).ToString();
+                                                await client.SetTaskAsync("Category/" + obj.Id, obj);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                data.All = (all + newV).ToString();
+                                data.Now = (now + newV).ToString();
+                                data.New = null;
+                                await client.SetTaskAsync(path + data.Id, data);
+                            }
+                            else
+                            {
+                                data.Old = null;
+                                data.All = null;
+                                data.Now = null;
+                                data.New = null;
+                                data.Note = null;
+                            }
+                            switch (pos)
+                            {
+                                case 0:
+                                    {
+                                        dataGrid.Items.Refresh();
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        dataGrid1.Items.Refresh();
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        dataGrid2.Items.Refresh();
+                                        break;
+                                    }
+                            }
+                        }
+                        catch
+                        {
+                            data.New = null;
+                            MessageBox.Show("Некорректность вводимых или хранимых данных.");
+                        }
                     }
                 }
+                catch { }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -383,16 +448,34 @@ namespace Client
 
         private void tab_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            switch (pos)
+            {
+                case 0:
+                    {
+                        dataGrid.CancelEdit(DataGridEditingUnit.Row);
+                        break;
+                    }
+                case 1:
+                    {
+                        dataGrid1.CancelEdit(DataGridEditingUnit.Row);
+                        break;
+                    }
+                case 2:
+                    {
+                        dataGrid2.CancelEdit(DataGridEditingUnit.Row);
+                        break;
+                    }
+            }
             try
             {
                 if (tab.SelectedIndex != pos)
                 {
+
                     pos = tab.SelectedIndex;
                     Load();
                 }
             }
             catch { }
-
         }
 
         private async void Set_Items(object sender, RoutedEventArgs e)
