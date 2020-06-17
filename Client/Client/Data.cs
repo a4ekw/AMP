@@ -10,5 +10,6 @@
         public string New { get; set; }
         public string Note { get; set; }
         public string cnt { get; set; }
+        public string Key { get; set; }
     }
 }

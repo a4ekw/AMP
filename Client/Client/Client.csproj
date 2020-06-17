@@ -70,6 +70,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Items.cs" />
+    <Compile Include="KeyO.cs" />
     <Compile Include="SetItems.xaml.cs">
       <DependentUpon>SetItems.xaml</DependentUpon>
     </Compile>

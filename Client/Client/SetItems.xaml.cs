@@ -19,11 +19,12 @@ namespace Client
 {
     public partial class SetItems : Window
     {
-        string name, id;
+        string name, id, key;
+        DateTime date = DateTime.Now;
         List<Data> listS = new List<Data>();
         List<Data> listR = new List<Data>();
         List<DataC> listС = new List<DataC>();
-        List<ItemsR> listI = new List<ItemsR>();
+        List<Item> listI = new List<Item>();
 
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
@@ -32,11 +33,12 @@ namespace Client
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
-        public SetItems(string name, string id)
+        public SetItems(string name, string id, string key)
         {
             InitializeComponent();
             this.name = name;
             this.id = id;
+            this.key = key;
             client = new FireSharp.FirebaseClient(config);
             labelR.Content = "Комплектация \"" + name + "\"";
             Load();
@@ -52,7 +54,7 @@ namespace Client
                 listС.Clear();
                 listI.Clear();
 
-                FirebaseResponse resp = await client.GetTaskAsync("Counter/node");
+                FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
                 Counter get = resp.ResultAs<Counter>();
 
                 int count = Convert.ToInt32(get.cnt);
@@ -61,14 +63,14 @@ namespace Client
                     {
                         try
                         {
-                            FirebaseResponse response = await client.GetTaskAsync("Category/" + i);
+                            FirebaseResponse response = await client.GetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i);
                             Data data = response.ResultAs<Data>();
                             listS.Add(data);
                         }
                         catch { }
                     }
 
-                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + id);
+                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + id);
                 ItemsCount getC = resp1.ResultAs<ItemsCount>();
                 count = Convert.ToInt32(getC.cnt);
                 if (count != 0)
@@ -77,18 +79,18 @@ namespace Client
                     {
                         try
                         {
-                            FirebaseResponse response = await client.GetTaskAsync("Out/" + id + "/Items/" + i);
-                            ItemsR itemsR = response.ResultAs<ItemsR>();
+                            FirebaseResponse response = await client.GetTaskAsync("Out/" + key + "/" + i);
+                            Item itemsR = response.ResultAs<Item>();
                             listI.Add(itemsR);
                         }
                         catch { }
                     }
 
                     int l = listS.Count;
-                    foreach (ItemsR item in listI)
+                    foreach (Item item in listI)
                         for (int i = 0; i < l; i++)
                         {
-                            if (listS.ElementAt(i).Id == item.Id)
+                            if (listS.ElementAt(i).Name == item.Name)
                             {
                                 Data d = listS.ElementAt(i);
                                 DataC dataC = new DataC();

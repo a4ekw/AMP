@@ -5,9 +5,9 @@
         public string cnt { get; set; }
     }
 
-    internal class ItemsR
+    internal class Item
     {
-        public string Id { get; set; }
+        public string Name { get; set; }
         public string Now { get; set; }
     }
 }

@@ -19,7 +19,7 @@
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGrid"            
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
-                  RowEditEnding="dataGrid_RowEditEnding">
+                  RowEditEnding="dataGrid_RowEditEnding" Visibility="Collapsed">
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*"/>
@@ -91,6 +91,7 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Label Name="label" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Товары">
@@ -169,6 +170,7 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Label Name="label1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Продукция" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="72" Margin="0">
@@ -246,7 +248,7 @@
                             </DataGridTextColumn>
 
 
-                            <DataGridTextColumn Header="Заметка" Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
+                            <DataGridTextColumn Header="Заметка" Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Width="0.3*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -269,6 +271,7 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Label Name="label2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
         </TabControl>
