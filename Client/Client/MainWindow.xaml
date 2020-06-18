@@ -14,7 +14,7 @@
     <Grid Margin="10" Name="Grid">
         <Button Name="refresh" Content="Обновить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click_Refresh"/>
         <Button Name="delete" Content="Удалить" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_Delete"/>
-        <TabControl x:Name="tab" RenderTransformOrigin="2.35,0.71" Margin="0,25,0,0" SelectionChanged="tab_SelectionChanged" Loaded="tab_Loaded">
+        <TabControl x:Name="tab" RenderTransformOrigin="2.35,0.71" Margin="0,25" SelectionChanged="tab_SelectionChanged" Loaded="tab_Loaded">
             <TabItem Header="Материалы">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGrid"            
@@ -275,5 +275,10 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <ProgressBar Name="progress" Visibility="Hidden" Maximum="100" Height="10" VerticalAlignment="Top" HorizontalAlignment="Right" Width="200" Margin="0,2,0,0"/>
+
+        <DatePicker Name="picker" HorizontalAlignment="Left" SelectedDateChanged="picker_SelectedDateChanged" VerticalAlignment="Bottom"/>
+
+        <Button Name="reset" Content="Сброс" Click="Button_Click_Reset" HorizontalAlignment="Left" Margin="140,0,0,2" VerticalAlignment="Bottom" Width="75"/>
     </Grid>
 </Window>

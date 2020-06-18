@@ -49,6 +49,8 @@ namespace Client
         {
             try
             {
+                progress.Value = 0;
+                progress.Visibility = Visibility.Visible;
                 listS.Clear();
                 listR.Clear();
                 listС.Clear();
@@ -56,9 +58,12 @@ namespace Client
 
                 FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
                 Counter get = resp.ResultAs<Counter>();
+                progress.Value = 10;
 
                 int count = Convert.ToInt32(get.cnt);
                 if (count != 0)
+                {
+                    int v = Convert.ToInt32(count), val = 10;
                     for (int i = 1; i <= count; i++)
                     {
                         try
@@ -66,15 +71,19 @@ namespace Client
                             FirebaseResponse response = await client.GetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i);
                             Data data = response.ResultAs<Data>();
                             listS.Add(data);
+                            val += 20 / v;
+                            progress.Value = val;
                         }
                         catch { }
                     }
+                }
 
                 FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + id);
                 ItemsCount getC = resp1.ResultAs<ItemsCount>();
                 count = Convert.ToInt32(getC.cnt);
                 if (count != 0)
                 {
+                    int v = Convert.ToInt32(count), val = 35; ;
                     for (int i = 1; i <= count; i++)
                     {
                         try
@@ -82,6 +91,8 @@ namespace Client
                             FirebaseResponse response = await client.GetTaskAsync("Out/" + key + "/" + i);
                             Item itemsR = response.ResultAs<Item>();
                             listI.Add(itemsR);
+                            val += 35 / v;
+                            progress.Value = val;
                         }
                         catch { }
                     }
@@ -102,6 +113,8 @@ namespace Client
                                 l--;
                                 d.Now = item.Now;
                                 listR.Add(d);
+                                val += 30 / l;
+                                progress.Value = val;
                             }
                         }
                     labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
@@ -116,6 +129,7 @@ namespace Client
                 labelS.Content = "Доступная комплектация (" + listS.Count + " ед.)";
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
+            progress.Visibility = Visibility.Hidden;
         }
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
@@ -186,12 +200,5 @@ namespace Client
             }
             catch { }
         }
-    }
-
-    internal class DataC
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Now { get; set; }
     }
 }

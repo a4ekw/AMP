@@ -12,4 +12,11 @@
         public string cnt { get; set; }
         public string Key { get; set; }
     }
+
+    public class DataC
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Now { get; set; }
+    }
 }
