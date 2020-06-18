@@ -32,16 +32,42 @@ namespace Client
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); 
+            Trial();
             client = new FireSharp.FirebaseClient(config);
             picker.SelectedDate = date;
             Load();
         }
 
+        private void Trial()
+        {
+            if (date.Month >= 7 || date.Year > 2020)
+            {
+                if (date.Day == 18)
+                {
+                    MessageBox.Show("Осталось 3 дня пробного периода.");
+                }
+                if (date.Day == 19)
+                {
+                    MessageBox.Show("Осталось 3 дня пробного периода.");
+                }
+                if (date.Day == 20)
+                {
+                    MessageBox.Show("Остался 1 день пробного периода.");
+                    Application.Current.Shutdown();
+                }
+                if (date.Day > 20)
+                {
+                    MessageBox.Show("Пробный период истек.");
+                    Application.Current.Shutdown();
+                }
+            }
+        }
+
         private async void Load()
         {
             reset.IsEnabled = false;
-            //picker.IsEnabled = false;
+            picker.IsEnabled = false;
             isLoading = true;
             try
             {
@@ -52,7 +78,7 @@ namespace Client
 
 
                 list.Clear();
-                
+
                 int val = 20;
 
                 switch (tab.SelectedIndex)
@@ -68,6 +94,8 @@ namespace Client
 
                             if (isToday)
                             {
+                                dataGrid.CanUserAddRows = true;
+                                dataGrid.IsReadOnly = false;
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
                                 int? count = null;
@@ -196,6 +224,8 @@ namespace Client
                             }
                             else
                             {
+                                dataGrid.CanUserAddRows = false;
+                                dataGrid.IsReadOnly = true;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
@@ -205,7 +235,7 @@ namespace Client
                                     progress.Value = 10;
                                     if (get.cnt != null && get.cnt != "0")
                                     {
-                                    int count = Convert.ToInt32(get.cnt), v = 10;
+                                        int count = Convert.ToInt32(get.cnt), v = 10;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -229,14 +259,13 @@ namespace Client
                                     else
                                     {
                                         label.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
-                                        picker.IsDropDownOpen = true;
                                     }
                                 }
                                 catch
                                 {
                                     label.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
-                                    picker.IsDropDownOpen = true;
                                 }
+                                picker.IsDropDownOpen = true;
                             }
                             progress.Value = 99;
                             tab.IsEnabled = true;
@@ -253,6 +282,8 @@ namespace Client
 
                             if (isToday)
                             {
+                                dataGrid1.CanUserAddRows = true;
+                                dataGrid1.IsReadOnly = false;
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
                                 int? count = null;
@@ -382,6 +413,8 @@ namespace Client
                             }
                             else
                             {
+                                dataGrid1.CanUserAddRows = false;
+                                dataGrid1.IsReadOnly = true;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
@@ -415,14 +448,13 @@ namespace Client
                                     else
                                     {
                                         label1.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
-                                        picker.IsDropDownOpen = true;
                                     }
                                 }
                                 catch
                                 {
                                     label1.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
-                                    picker.IsDropDownOpen = true;
                                 }
+                                picker.IsDropDownOpen = true;
                             }
                             progress.Value = 99;
                             tab.IsEnabled = true;
@@ -434,12 +466,14 @@ namespace Client
                             dataGrid2.Visibility = Visibility.Hidden;
                             dataGrid2.Items.Refresh();
                             tab.IsEnabled = false;
-                                progress.Value = 0;
-                                progress.Visibility = Visibility.Visible;
+                            progress.Value = 0;
+                            progress.Visibility = Visibility.Visible;
 
 
                             if (isToday)
                             {
+                                dataGrid2.CanUserAddRows = true;
+                                dataGrid2.IsReadOnly = false;
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
                                 int? count = null;
@@ -569,6 +603,8 @@ namespace Client
                             }
                             else
                             {
+                                dataGrid2.CanUserAddRows = false;
+                                dataGrid2.IsReadOnly = true;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
@@ -602,16 +638,15 @@ namespace Client
                                     else
                                     {
                                         label2.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
-                                        picker.IsDropDownOpen = true;
                                     }
                                 }
                                 catch
                                 {
                                     label2.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
-                                    picker.IsDropDownOpen = true;
                                 }
+                                picker.IsDropDownOpen = true;
                             }
-                                progress.Value = 99;
+                            progress.Value = 99;
                             tab.IsEnabled = true;
                             break;
                         }
@@ -683,7 +718,7 @@ namespace Client
             progress.Visibility = Visibility.Hidden;
             tab.IsEnabled = true;
             reset.IsEnabled = true;
-            //picker.IsEnabled = true;
+            picker.IsEnabled = true;
             isLoading = false;
         }
 
@@ -1142,12 +1177,16 @@ namespace Client
         private void picker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             selectedDate = picker.SelectedDate;
-            if(selectedDate.Value.Day == date.Day && selectedDate.Value.Month == date.Month && selectedDate.Value.Year == date.Year)
+            if (selectedDate.Value.Day == date.Day && selectedDate.Value.Month == date.Month && selectedDate.Value.Year == date.Year)
             {
                 isToday = true;
+                reset.Visibility = Visibility.Hidden;
             }
             else
+            {
                 isToday = false;
+                reset.Visibility = Visibility.Visible;
+            }
             if (!isLoading)
                 Load();
         }

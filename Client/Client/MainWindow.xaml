@@ -12,12 +12,12 @@
     </Window.Resources>
 
     <Grid Margin="10" Name="Grid">
-        <Button Name="refresh" Content="Обновить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click_Refresh"/>
-        <Button Name="delete" Content="Удалить" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_Delete"/>
-        <TabControl x:Name="tab" RenderTransformOrigin="2.35,0.71" Margin="0,25" SelectionChanged="tab_SelectionChanged" Loaded="tab_Loaded">
+        <Button Name="refresh" BorderBrush="Blue" Content="Обновить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click_Refresh"/>
+        <Button Name="delete"  BorderBrush="Blue" Content="Удалить" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_Delete"/>
+        <TabControl x:Name="tab" BorderBrush="Blue" RenderTransformOrigin="2.35,0.71" Margin="0,25" SelectionChanged="tab_SelectionChanged" Loaded="tab_Loaded">
             <TabItem Header="Материалы">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGrid"            
+                    <DataGrid x:Name="dataGrid" BorderBrush="Blue"           
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
                   RowEditEnding="dataGrid_RowEditEnding" Visibility="Collapsed">
                         <DataGrid.Columns>
@@ -96,7 +96,7 @@
             </TabItem>
             <TabItem Header="Товары">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGrid1"           
+                    <DataGrid x:Name="dataGrid1" BorderBrush="Blue"           
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
                   RowEditEnding="dataGrid_RowEditEnding">
                         <DataGrid.Columns>
@@ -175,7 +175,7 @@
             </TabItem>
             <TabItem Header="Продукция" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="72" Margin="0">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGrid2"            
+                    <DataGrid x:Name="dataGrid2" BorderBrush="Blue"            
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
                   RowEditEnding="dataGrid_RowEditEnding">
                         <DataGrid.Columns>
@@ -279,6 +279,6 @@
 
         <DatePicker Name="picker" HorizontalAlignment="Left" SelectedDateChanged="picker_SelectedDateChanged" VerticalAlignment="Bottom"/>
 
-        <Button Name="reset" Content="Сброс" Click="Button_Click_Reset" HorizontalAlignment="Left" Margin="140,0,0,2" VerticalAlignment="Bottom" Width="75"/>
+        <Button Name="reset" BorderBrush="Blue" Content="Сброс" Click="Button_Click_Reset" HorizontalAlignment="Left" Margin="140,0,0,2" VerticalAlignment="Bottom" Width="75"/>
     </Grid>
 </Window>
