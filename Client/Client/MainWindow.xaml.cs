@@ -13,7 +13,9 @@ namespace Client
 {
     public partial class MainWindow : Window
     {
-        Counter get = new Counter();
+        CounterC getC = new CounterC();
+        CounterP getP = new CounterP();
+        CounterO getO = new CounterO();
         DateTime date = DateTime.Now;
         DateTime? selectedDate;
         static List<int> free = new List<int>();
@@ -26,7 +28,7 @@ namespace Client
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
         {
-            AuthSecret = "",
+            AuthSecret = "q1oz56hqzen6Qlx8zp4gbMH5EgGCsF6AkY50ZKHc",
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
@@ -169,14 +171,14 @@ namespace Client
                                     label.Content = "Поиск данных за " + month + " " + yy + "...";
                                     try
                                     {
-                                        FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + dd.ToString() + mm.ToString() + yy.ToString());
-                                        get = resp.ResultAs<Counter>();
+                                        FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + dd.ToString() + mm.ToString() + yy.ToString());
+                                        getC = resp.ResultAs<CounterC>();
                                     }
                                     catch { }
 
-                                    if (get.cnt != null)
+                                    if (getC.cnt != null)
                                     {
-                                        count = Convert.ToInt32(get.cnt);
+                                        count = Convert.ToInt32(getC.cnt);
                                         break;
                                     }
                                     if (dd > 1)
@@ -197,7 +199,7 @@ namespace Client
                                     }
                                     if (dd == date.Day && mm == date.Month && yy == date.Year - 1)
                                     {
-                                        get.cnt = "0";
+                                        getC.cnt = "0";
                                         break;
                                     }
                                 }
@@ -229,13 +231,13 @@ namespace Client
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
-                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + picker.SelectedDate.Value.Day.ToString()
+                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + picker.SelectedDate.Value.Day.ToString()
                                         + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
-                                    get = resp.ResultAs<Counter>();
+                                    getC = resp.ResultAs<CounterC>();
                                     progress.Value = 10;
-                                    if (get.cnt != null && get.cnt != "0")
+                                    if (getC.cnt != null && getC.cnt != "0")
                                     {
-                                        int count = Convert.ToInt32(get.cnt), v = 10;
+                                        int count = Convert.ToInt32(getC.cnt), v = 10;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -358,14 +360,14 @@ namespace Client
 
                                     try
                                     {
-                                        FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + dd.ToString() + mm.ToString() + yy.ToString());
-                                        get = resp.ResultAs<Counter>();
+                                        FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeP/" + dd.ToString() + mm.ToString() + yy.ToString());
+                                        getP = resp.ResultAs<CounterP>();
                                     }
                                     catch { }
 
-                                    if (get.cntP != null)
+                                    if (getP.cnt != null)
                                     {
-                                        count = Convert.ToInt32(get.cntP);
+                                        count = Convert.ToInt32(getP.cnt);
                                         break;
                                     }
                                     if (dd > 1)
@@ -386,7 +388,7 @@ namespace Client
                                     }
                                     if (dd == date.Day && mm == date.Month && yy == date.Year - 1)
                                     {
-                                        get.cntP = "0";
+                                        getP.cnt = "0";
                                         break;
                                     }
                                 }
@@ -418,13 +420,13 @@ namespace Client
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
-                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + picker.SelectedDate.Value.Day.ToString()
+                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeP/" + picker.SelectedDate.Value.Day.ToString()
                                         + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
-                                    get = resp.ResultAs<Counter>();
+                                    getP = resp.ResultAs<CounterP>();
                                     progress.Value = 10;
-                                    if (get.cntP != null && get.cntP != "0")
+                                    if (getP.cnt != null && getP.cnt != "0")
                                     {
-                                        int count = Convert.ToInt32(get.cntP), v = 10;
+                                        int count = Convert.ToInt32(getP.cnt), v = 10;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -548,14 +550,14 @@ namespace Client
 
                                     try
                                     {
-                                        FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + dd.ToString() + mm.ToString() + yy.ToString());
-                                        get = resp.ResultAs<Counter>();
+                                        FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeO/" + dd.ToString() + mm.ToString() + yy.ToString());
+                                        getO = resp.ResultAs<CounterO>();
                                     }
                                     catch { }
 
-                                    if (get.cntO != null)
+                                    if (getO.cnt != null)
                                     {
-                                        count = Convert.ToInt32(get.cntO);
+                                        count = Convert.ToInt32(getO.cnt);
                                         break;
                                     }
                                     if (dd > 1)
@@ -576,7 +578,7 @@ namespace Client
                                     }
                                     if (dd == date.Day && mm == date.Month && yy == date.Year - 1)
                                     {
-                                        get.cntO = "0";
+                                        getO.cnt = "0";
                                         break;
                                     }
                                 }
@@ -608,13 +610,13 @@ namespace Client
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
-                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + picker.SelectedDate.Value.Day.ToString()
+                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeO/" + picker.SelectedDate.Value.Day.ToString()
                                         + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
-                                    get = resp.ResultAs<Counter>();
+                                    getO = resp.ResultAs<CounterO>();
                                     progress.Value = 10;
-                                    if (get.cntO != null && get.cntO != "0")
+                                    if (getO.cnt != null && getO.cnt != "0")
                                     {
-                                        int count = Convert.ToInt32(get.cntO), v = 10;
+                                        int count = Convert.ToInt32(getO.cnt), v = 10;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -654,42 +656,37 @@ namespace Client
 
                 if (dd != date.Day || mm != date.Month || yy != date.Year)
                 {
-                    Counter obj = new Counter();
                     switch (tab.SelectedIndex)
                     {
                         case 0:
                             {
-                                obj = new Counter
+                                var obj = new CounterC
                                 {
                                     cnt = list.Count.ToString(),
-                                    cntP = get.cntP,
-                                    cntO = get.cntO
                                 };
+                                await client.SetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                 break;
                             }
                         case 1:
                             {
-                                obj = new Counter
+                                var obj = new CounterP
                                 {
-                                    cnt = get.cnt,
-                                    cntP = list.Count.ToString(),
-                                    cntO = get.cntO
+                                    cnt = list.Count.ToString()
                                 };
+                                await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                 break;
                             }
                         case 2:
                             {
-                                obj = new Counter
+                                var obj = new CounterO
                                 {
-                                    cnt = get.cnt,
-                                    cntP = get.cntP,
-                                    cntO = list.Count.ToString()
+                                    cnt = list.Count.ToString()
                                 };
+                                await client.SetTaskAsync("Counter/nodeO/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                 break;
                             }
 
                     }
-                    await client.SetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                     string path = "";
 
                     if (pos == 0)
@@ -727,21 +724,21 @@ namespace Client
             try
             {
                 int count = 0;
-                switch (tab.SelectedIndex)
+                switch (pos)
                 {
                     case 0:
                         {
-                            count = Convert.ToInt32(get.cnt);
+                            count = Convert.ToInt32(getC.cnt);
                             break;
                         }
                     case 1:
                         {
-                            count = Convert.ToInt32(get.cntP);
+                            count = Convert.ToInt32(getP.cnt);
                             break;
                         }
                     case 2:
                         {
-                            count = Convert.ToInt32(get.cntO);
+                            count = Convert.ToInt32(getO.cnt);
                             break;
                         }
                 }
@@ -843,9 +840,6 @@ namespace Client
                 progress.Value = 0;
                 progress.Visibility = Visibility.Visible;
 
-                FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                Counter get = resp.ResultAs<Counter>();
-
                 progress.Value = 10;
 
                 int value = 0;
@@ -853,18 +847,24 @@ namespace Client
 
                 if (pos == 0)
                 {
+                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                    getC = resp.ResultAs<CounterC>();
                     path = "Category/";
-                    value = Convert.ToInt32(get.cnt) + 1;
+                    value = Convert.ToInt32(getC.cnt) + 1;
                 }
                 if (pos == 1)
                 {
+                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                    getP = resp.ResultAs<CounterP>();
                     path = "Products/";
-                    value = Convert.ToInt32(get.cntP) + 1;
+                    value = Convert.ToInt32(getP.cnt) + 1;
                 }
                 if (pos == 2)
                 {
+                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeO/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                    getO = resp.ResultAs<CounterO>();
                     path = "Out/";
-                    value = Convert.ToInt32(get.cntO) + 1;
+                    value = Convert.ToInt32(getO.cnt) + 1;
                 }
 
                 var data = e.Row.Item as Data;
@@ -880,7 +880,7 @@ namespace Client
                                 {
                                     data.cnt = "0";
                                     FirebaseResponse respKey = await client.GetTaskAsync("Key/");
-                                    KeyO getKey = resp.ResultAs<KeyO>();
+                                    KeyO getKey = respKey.ResultAs<KeyO>();
                                     progress.Value = 20;
                                     getKey.key = (Convert.ToDouble(getKey.key) + 1).ToString();
                                     data.Key = getKey.key;
@@ -901,43 +901,38 @@ namespace Client
                                 {
                                     data.Id = value.ToString();
                                     await client.SetTaskAsync(path + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + value.ToString(), data);
-                                    progress.Value = 200; 
-                                    Counter obj = new Counter();
+                                    progress.Value = 200;
                                     switch (tab.SelectedIndex)
                                     {
                                         case 0:
                                             {
-                                                obj = new Counter
+                                                var obj = new CounterC
                                                 {
                                                     cnt = value.ToString(),
-                                                    cntP = get.cntP,
-                                                    cntO = get.cntO
                                                 };
+                                                await client.SetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                                 break;
                                             }
                                         case 1:
                                             {
-                                                obj = new Counter
+                                                var obj = new CounterP
                                                 {
-                                                    cnt = get.cnt,
-                                                    cntP = value.ToString(),
-                                                    cntO = get.cntO
+                                                    cnt = value.ToString(),
                                                 };
+                                                await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                                 break;
                                             }
                                         case 2:
                                             {
-                                                obj = new Counter
+                                                var obj = new CounterO
                                                 {
-                                                    cnt = get.cnt,
-                                                    cntP = get.cntP,
-                                                    cntO = value.ToString()
+                                                    cnt = value.ToString(),
                                                 };
+                                                await client.SetTaskAsync("Counter/nodeO/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                                 break;
                                             }
 
                                     }
-                                    await client.SetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
                                     progress.Value = 99;
                                 }
                             }
@@ -990,10 +985,10 @@ namespace Client
                                     listI.Clear();
                                     listR.Clear();
 
-                                    FirebaseResponse res = await client.GetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                                    get = res.ResultAs<Counter>();
+                                    FirebaseResponse res = await client.GetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                                    getP = res.ResultAs<CounterP>();
                                     progress.Value = 20;
-                                    int count = Convert.ToInt32(get.cnt);
+                                    int count = Convert.ToInt32(getP.cnt);
                                     if (count != 0)
                                     {
                                         int v = Convert.ToInt32(count), val = 20;

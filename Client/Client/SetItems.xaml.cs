@@ -29,7 +29,7 @@ namespace Client
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
         {
-            AuthSecret = "q1oz56hqzen6Qlx8zp4gbMH5EgGCsF6AkY50ZKHc",
+            AuthSecret = "",
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
@@ -56,8 +56,8 @@ namespace Client
                 listС.Clear();
                 listI.Clear();
 
-                FirebaseResponse resp = await client.GetTaskAsync("Counter/node/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                Counter get = resp.ResultAs<Counter>();
+                FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                CounterC get = resp.ResultAs<CounterC>();
                 progress.Value = 10;
 
                 int count = Convert.ToInt32(get.cnt);
@@ -110,11 +110,11 @@ namespace Client
                                 dataC.Now = d.Now;
                                 listС.Add(dataC);
                                 listS.Remove(d);
+                                val += 30 / l;
+                                progress.Value = val;
                                 l--;
                                 d.Now = item.Now;
                                 listR.Add(d);
-                                val += 30 / l;
-                                progress.Value = val;
                             }
                         }
                     labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
