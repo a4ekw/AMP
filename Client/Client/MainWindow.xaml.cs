@@ -28,13 +28,13 @@ namespace Client
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
         {
-            AuthSecret = "q1oz56hqzen6Qlx8zp4gbMH5EgGCsF6AkY50ZKHc",
+            AuthSecret = "",
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
         public MainWindow()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             Trial();
             client = new FireSharp.FirebaseClient(config);
             picker.SelectedDate = date;
@@ -43,7 +43,7 @@ namespace Client
 
         private void Trial()
         {
-            if (date.Month >= 7 || date.Year > 2020)
+            if (date.Month >= 8 || date.Year > 2020)
             {
                 if (date.Day == 18)
                 {
@@ -68,6 +68,7 @@ namespace Client
 
         private async void Load()
         {
+            r:
             reset.IsEnabled = false;
             picker.IsEnabled = false;
             isLoading = true;
@@ -706,6 +707,7 @@ namespace Client
                     {
                         await client.SetTaskAsync(path + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i, list.ElementAt(i - 1));
                     }
+                    goto r;
                 }
 
                 refresh.IsEnabled = true;
@@ -970,7 +972,7 @@ namespace Client
                                 int i = list.IndexOf(data);
                                 double all, now, newV;
                                 if (data.All != null && data.All != " " && data.All != "")
-                                    all = Convert.ToDouble(data.All);
+                                    all = Convert.ToDouble(data.Now);
                                 else
                                     all = 0;
 
@@ -985,10 +987,10 @@ namespace Client
                                     listI.Clear();
                                     listR.Clear();
 
-                                    FirebaseResponse res = await client.GetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                                    getP = res.ResultAs<CounterP>();
+                                    FirebaseResponse res = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                                    var get = res.ResultAs<CounterC>();
                                     progress.Value = 20;
-                                    int count = Convert.ToInt32(getP.cnt);
+                                    int count = Convert.ToInt32(get.cnt);
                                     if (count != 0)
                                     {
                                         int v = Convert.ToInt32(count), val = 20;
@@ -1041,9 +1043,12 @@ namespace Client
                                         }
                                     }
                                     progress.Value = 90;
+                                    data.cnt = count.ToString();
                                 }
-                                data.All = (all + newV).ToString();
+                                data.Old = data.Now;
                                 data.Now = (now + newV).ToString();
+                                data.All = data.Now;
+                                data.Last = data.New;
                                 data.New = null;
                                 await client.SetTaskAsync(path + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id, data);
                                 progress.Value = 99;
@@ -1055,6 +1060,7 @@ namespace Client
                                 data.All = null;
                                 data.Now = null;
                                 data.New = null;
+                                data.Last = null;
                                 data.Note = null;
                             }
                             switch (pos)
@@ -1131,37 +1137,40 @@ namespace Client
         {
             try
             {
-
                 Data data = dataGrid2.SelectedItem as Data;
-                SetItems setItems = new SetItems(data.Name, data.Id, data.Key);
+                SetItems setItems = new SetItems(data.Name, data.Id, data.Key, picker);
 
                 if (setItems.ShowDialog() == true)
                 {
-                progress.Value = 0;
-                progress.Visibility = Visibility.Visible;
-
-                    var items = new ItemsCount
+                    if (picker.SelectedDate.Value == date)
                     {
-                        cnt = setItems.ItemsList.Count.ToString(),
-                    };
+                        progress.Value = 0;
+                        progress.Visibility = Visibility.Visible;
 
-                    await client.SetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id, items);
-                    progress.Value = 15;
-                    await client.DeleteTaskAsync("Out/" + data.Key);
-                    progress.Value = 30;
+                        var items = new ItemsCount
+                        {
+                            cnt = setItems.ItemsList.Count.ToString(),
+                        };
 
-                    int count = setItems.ItemsList.Count, v = Convert.ToInt32(count), val = 30;
-                    for (int i = 0; i < count; i++)
-                    {
-                        Data obj = setItems.ItemsList.ElementAt(i);
-                        obj.Id = null;
-                        obj.New = null;
-                        obj.All = null;
-                        obj.Old = null;
-                        obj.Key = null;
-                        await client.SetTaskAsync("Out/" + data.Key + "/" + (i + 1), obj);
-                        val += 65 / v;
-                        progress.Value = val;
+                        await client.SetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id, items);
+                        progress.Value = 15;
+                        await client.DeleteTaskAsync("Out/" + data.Key);
+                        progress.Value = 30;
+
+                        int count = setItems.ItemsList.Count, v = Convert.ToInt32(count), val = 30;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Data obj = setItems.ItemsList.ElementAt(i);
+                            obj.Id = null;
+                            obj.New = null;
+                            obj.All = null;
+                            obj.Old = null;
+                            obj.Key = null;
+                            obj.Rem = null;
+                            await client.SetTaskAsync("Out/" + data.Key + "/" + (i + 1), obj);
+                            val += 65 / v;
+                            progress.Value = val;
+                        }
                     }
                 }
             }

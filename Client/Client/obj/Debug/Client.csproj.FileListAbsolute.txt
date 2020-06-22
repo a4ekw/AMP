@@ -27,3 +27,7 @@ D:\MP\Client\Client\obj\Debug\SetItems.g.cs
 D:\MP\Client\Client\obj\Debug\SetItems.baml
 D:\MP\Client\Client\obj\Debug\SetQuantity.g.cs
 D:\MP\Client\Client\obj\Debug\SetQuantity.baml
+D:\MP\Client\Client\bin\Debug\Client.exe.manifest
+D:\MP\Client\Client\bin\Debug\Client.application
+D:\MP\Client\Client\obj\Debug\Client.exe.manifest
+D:\MP\Client\Client\obj\Debug\Client.application

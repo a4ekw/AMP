@@ -22,9 +22,9 @@
                   MouseDoubleClick="dataGridS_MouseDoubleClick">
             <DataGrid.Columns>
 
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.8*" IsReadOnly="True"/>
 
-                <DataGridTextColumn Header="Акутальный остаток" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.3*" IsReadOnly="True">
+                <DataGridTextColumn Header="Остаток" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.2*" IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -50,9 +50,9 @@
                   MouseDoubleClick="dataGridR_MouseDoubleClick">
             <DataGrid.Columns>
 
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.8*" IsReadOnly="True"/>
 
-                <DataGridTextColumn Header="Норма" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.3*" IsReadOnly="True">
+                <DataGridTextColumn Header="Норма" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.1*" IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -71,9 +71,27 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
+                <DataGridTextColumn Header="Остаток" Binding="{Binding Rem, UpdateSourceTrigger=PropertyChanged}" Width="0.2*" IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="Background" Value="{Binding Rem, Converter={StaticResource Colors}}"/>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
             </DataGrid.Columns>
         </DataGrid>
-
 
         <WrapPanel HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="1" Height="25" VerticalAlignment="Bottom">
             <Button IsDefault="True" Click="Accept_Click" MinWidth="60" Margin="0,0,10,0">OK</Button>

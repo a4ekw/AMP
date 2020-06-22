@@ -21,6 +21,7 @@ namespace Client
     {
         string name, id, key;
         DateTime date = DateTime.Now;
+        DatePicker picker = new DatePicker();
         List<Data> listS = new List<Data>();
         List<Data> listR = new List<Data>();
         List<DataC> listС = new List<DataC>();
@@ -33,14 +34,25 @@ namespace Client
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
-        public SetItems(string name, string id, string key)
+        public SetItems(string name, string id, string key, DatePicker picker)
         {
             InitializeComponent();
             this.name = name;
             this.id = id;
             this.key = key;
+            this.picker = picker;
             client = new FireSharp.FirebaseClient(config);
             labelR.Content = "Комплектация \"" + name + "\"";
+            if (picker.SelectedDate.Value.Day != date.Day || picker.SelectedDate.Value.Month != date.Month || picker.SelectedDate.Value.Year != date.Year)
+            {
+                dataGridS.IsEnabled = false;
+                dataGridR.IsEnabled = false;
+            }
+            else
+            {
+                dataGridS.IsEnabled = true;
+                dataGridR.IsEnabled = true;
+            }
             Load();
         }
 
@@ -56,7 +68,8 @@ namespace Client
                 listС.Clear();
                 listI.Clear();
 
-                FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + picker.SelectedDate.Value.Day.ToString()
+                    + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
                 CounterC get = resp.ResultAs<CounterC>();
                 progress.Value = 10;
 
@@ -68,7 +81,8 @@ namespace Client
                     {
                         try
                         {
-                            FirebaseResponse response = await client.GetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i);
+                            FirebaseResponse response = await client.GetTaskAsync("Category/" + picker.SelectedDate.Value.Day.ToString()
+                    + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + i);
                             Data data = response.ResultAs<Data>();
                             listS.Add(data);
                             val += 20 / v;
@@ -78,7 +92,8 @@ namespace Client
                     }
                 }
 
-                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + id);
+                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + picker.SelectedDate.Value.Day.ToString()
+                    + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + id);
                 ItemsCount getC = resp1.ResultAs<ItemsCount>();
                 count = Convert.ToInt32(getC.cnt);
                 if (count != 0)
@@ -113,6 +128,7 @@ namespace Client
                                 val += 30 / l;
                                 progress.Value = val;
                                 l--;
+                                d.Rem = d.Now;
                                 d.Now = item.Now;
                                 listR.Add(d);
                             }
@@ -126,7 +142,7 @@ namespace Client
                 dataGridR.ItemsSource = null;
                 dataGridR.ItemsSource = listR;
 
-                labelS.Content = "Доступная комплектация (" + listS.Count + " ед.)";
+                labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
             progress.Visibility = Visibility.Hidden;
@@ -145,16 +161,17 @@ namespace Client
         {
             try
             {
+                Data data = dataGridS.SelectedItem as Data;
                 SetQuantity setQuantity = new SetQuantity();
                 if (setQuantity.ShowDialog() == true)
                 {
-                    Data data = dataGridS.SelectedItem as Data;
                     DataC dataC = new DataC();
                     dataC.Id = data.Id;
                     dataC.Name = data.Name;
                     dataC.Now = data.Now;
                     listС.Add(dataC);
                     listS.Remove(data);
+                    data.Rem = data.Now;
                     data.Now = setQuantity.Value;
                     listR.Add(data);
 
@@ -162,7 +179,7 @@ namespace Client
                     dataGridR.ItemsSource = listR;
                     dataGridS.Items.Refresh();
 
-                    labelS.Content = "Доступная комплектация (" + listS.Count + " ед.)";
+                    labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
                     if (listR.Count == 0)
                         labelR.Content = "Комплектация \"" + name + "\"";
                     else
@@ -177,7 +194,6 @@ namespace Client
             try
             {
                 Data data = dataGridR.SelectedItem as Data;
-
                 foreach (DataC dataC in listС)
                     if (dataC.Id == data.Id && dataC.Name == data.Name)
                     {
@@ -192,7 +208,7 @@ namespace Client
                 dataGridS.ItemsSource = listS;
                 dataGridR.Items.Refresh();
 
-                labelS.Content = "Доступная комплектация (" + listS.Count + " ед.)";
+                labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
                 if (listR.Count == 0)
                     labelR.Content = "Комплектация \"" + name + "\"";
                 else
