@@ -22,7 +22,8 @@ namespace Client
         static List<Data> list = new List<Data>();
         static List<Data> listR = new List<Data>();
         static List<Item> listI = new List<Item>();
-        int pos = 0;
+        int pos = 0, v, check = 0;
+        int? count = null;
         bool isToday = true, isLoading = false;
 
         IFirebaseClient client;
@@ -68,10 +69,11 @@ namespace Client
 
         private async void Load()
         {
+            isLoading = true;
             r:
+            refresh.IsEnabled = false;
             reset.IsEnabled = false;
             picker.IsEnabled = false;
-            isLoading = true;
             try
             {
 
@@ -79,10 +81,7 @@ namespace Client
 
                 int dd = date.Day, mm = date.Month, yy = date.Year;
 
-
                 list.Clear();
-
-                int val = 20;
 
                 switch (tab.SelectedIndex)
                 {
@@ -101,9 +100,9 @@ namespace Client
                                 dataGrid.IsReadOnly = false;
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
-                                int? count = null;
                                 string month = "";
                                 progress.Value = 10;
+                                count = null;
                                 while (count == null)
                                 {
                                     switch (mm)
@@ -205,73 +204,68 @@ namespace Client
                                     }
                                 }
 
+                                string dds = dd.ToString(), mms = mm.ToString(), yys = yy.ToString();
                                 progress.Value = 20;
-                                int v = Convert.ToInt32(count);
+                                v = Convert.ToInt32(count);
                                 if (count != 0)
                                     for (int i = 1; i <= count; i++)
                                     {
                                         try
                                         {
-                                            FirebaseResponse response = await client.GetTaskAsync("Category/" + dd.ToString() + mm.ToString() + yy.ToString() + i);
-                                            Data data = response.ResultAs<Data>();
-                                            list.Add(data);
-                                            val += 70 / v;
-                                            progress.Value = val;
+                                            Load_List("Category/", dds, mms, yys, i);
                                         }
                                         catch { }
                                     }
-                                dataGrid.ItemsSource = null;
-                                dataGrid.ItemsSource = list;
-                                dataGrid.Visibility = Visibility.Visible;
-                                label.Visibility = Visibility.Hidden;
                             }
                             else
                             {
                                 dataGrid.CanUserAddRows = false;
                                 dataGrid.IsReadOnly = true;
+                                delete.Visibility = Visibility.Hidden;
+                                refresh.Visibility = Visibility.Hidden;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
-                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + picker.SelectedDate.Value.Day.ToString()
-                                        + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
+                                    string dds = picker.SelectedDate.Value.Day.ToString(),
+                                        mms = picker.SelectedDate.Value.Month.ToString(),
+                                        yys = picker.SelectedDate.Value.Year.ToString();
+                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + dds + mms + yys);
                                     getC = resp.ResultAs<CounterC>();
                                     progress.Value = 10;
                                     if (getC.cnt != null && getC.cnt != "0")
                                     {
-                                        int count = Convert.ToInt32(getC.cnt), v = 10;
+                                        v = Convert.ToInt32(getC.cnt);
+                                        count = v;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
                                             {
-                                                FirebaseResponse response = await client.GetTaskAsync("Category/" + picker.SelectedDate.Value.Day.ToString()
-                                            + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + i);
-                                                Data data = response.ResultAs<Data>();
-                                                list.Add(data);
-                                                v += 80 / count;
-                                                progress.Value = v;
+                                                Load_List("Category/", dds, mms, yys, i);
                                             }
                                             catch { }
                                         }
-                                        dataGrid.ItemsSource = null;
-                                        dataGrid.ItemsSource = list;
-                                        dataGrid.Visibility = Visibility.Visible;
-                                        label.Visibility = Visibility.Hidden;
-                                        delete.Visibility = Visibility.Hidden;
-                                        refresh.Visibility = Visibility.Hidden;
                                     }
                                     else
                                     {
+                                        tab.IsEnabled = true;
+                                        reset.IsEnabled = true;
+                                        picker.IsEnabled = true;
+                                        progress.Visibility = Visibility.Hidden;
                                         label.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
+                                        isLoading = false;
                                     }
                                 }
                                 catch
                                 {
+                                    tab.IsEnabled = true;
+                                    reset.IsEnabled = true;
+                                    picker.IsEnabled = true;
+                                    progress.Visibility = Visibility.Hidden;
                                     label.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
+                                    isLoading = false;
                                 }
                                 picker.IsDropDownOpen = true;
                             }
-                            progress.Value = 99;
-                            tab.IsEnabled = true;
                             break;
                         }
                     case 1:
@@ -289,7 +283,7 @@ namespace Client
                                 dataGrid1.IsReadOnly = false;
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
-                                int? count = null;
+                                count = null;
                                 string month = "";
                                 progress.Value = 10;
                                 while (count == null)
@@ -394,73 +388,68 @@ namespace Client
                                     }
                                 }
 
+                                string dds = dd.ToString(), mms = mm.ToString(), yys = yy.ToString();
                                 progress.Value = 20;
-                                int v = Convert.ToInt32(count);
+                                v = Convert.ToInt32(count);
                                 if (count != 0)
                                     for (int i = 1; i <= count; i++)
                                     {
                                         try
                                         {
-                                            FirebaseResponse response = await client.GetTaskAsync("Products/" + dd.ToString() + mm.ToString() + yy.ToString() + i);
-                                            Data data = response.ResultAs<Data>();
-                                            list.Add(data);
-                                            val += 70 / v;
-                                            progress.Value = val;
+                                            Load_List("Products/", dds, mms, yys, i);
                                         }
                                         catch { }
                                     }
-                                dataGrid1.ItemsSource = null;
-                                dataGrid1.ItemsSource = list;
-                                dataGrid1.Visibility = Visibility.Visible;
-                                label1.Visibility = Visibility.Hidden;
                             }
                             else
                             {
                                 dataGrid1.CanUserAddRows = false;
                                 dataGrid1.IsReadOnly = true;
+                                        delete.Visibility = Visibility.Hidden;
+                                        refresh.Visibility = Visibility.Hidden;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
-                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeP/" + picker.SelectedDate.Value.Day.ToString()
-                                        + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
+                                    string dds = picker.SelectedDate.Value.Day.ToString(),
+                                        mms = picker.SelectedDate.Value.Month.ToString(),
+                                        yys = picker.SelectedDate.Value.Year.ToString();
+                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeP/" + dds + mms + yys);
                                     getP = resp.ResultAs<CounterP>();
                                     progress.Value = 10;
                                     if (getP.cnt != null && getP.cnt != "0")
                                     {
-                                        int count = Convert.ToInt32(getP.cnt), v = 10;
+                                        v = Convert.ToInt32(getP.cnt);
+                                        count = v;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
                                             {
-                                                FirebaseResponse response = await client.GetTaskAsync("Products/" + picker.SelectedDate.Value.Day.ToString()
-                                            + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + i);
-                                                Data data = response.ResultAs<Data>();
-                                                list.Add(data);
-                                                v += 80 / count;
-                                                progress.Value = v;
+                                                Load_List("Products/", dds, mms, yys, i);
                                             }
                                             catch { }
                                         }
-                                        dataGrid1.ItemsSource = null;
-                                        dataGrid1.ItemsSource = list;
-                                        dataGrid1.Visibility = Visibility.Visible;
-                                        label1.Visibility = Visibility.Hidden;
-                                        delete.Visibility = Visibility.Hidden;
-                                        refresh.Visibility = Visibility.Hidden;
                                     }
                                     else
                                     {
+                                        tab.IsEnabled = true;
+                                        reset.IsEnabled = true;
+                                        picker.IsEnabled = true;
+                                        progress.Visibility = Visibility.Hidden;
                                         label1.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
+                                        isLoading = false;
                                     }
                                 }
                                 catch
                                 {
+                                    tab.IsEnabled = true;
+                                    reset.IsEnabled = true;
+                                    picker.IsEnabled = true;
+                                    progress.Visibility = Visibility.Hidden;
                                     label1.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
+                                    isLoading = false;
                                 }
                                 picker.IsDropDownOpen = true;
                             }
-                            progress.Value = 99;
-                            tab.IsEnabled = true;
                             break;
                         }
                     case 2:
@@ -479,7 +468,7 @@ namespace Client
                                 dataGrid2.IsReadOnly = false;
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
-                                int? count = null;
+                                count = null;
                                 string month = "";
                                 progress.Value = 10;
                                 while (count == null)
@@ -584,73 +573,87 @@ namespace Client
                                     }
                                 }
 
+                                string dds = dd.ToString(), mms = mm.ToString(), yys = yy.ToString();
                                 progress.Value = 20;
-                                int v = Convert.ToInt32(count);
+                                v = Convert.ToInt32(count);
                                 if (count != 0)
                                     for (int i = 1; i <= count; i++)
                                     {
                                         try
                                         {
-                                            FirebaseResponse response = await client.GetTaskAsync("Out/" + dd.ToString() + mm.ToString() + yy.ToString() + i);
-                                            Data data = response.ResultAs<Data>();
-                                            list.Add(data);
-                                            val += 70 / v;
-                                            progress.Value = val;
+                                            Load_List("Out/", dds, mms, yys, i);
                                         }
                                         catch { }
                                     }
-                                dataGrid2.ItemsSource = null;
-                                dataGrid2.ItemsSource = list;
-                                dataGrid2.Visibility = Visibility.Visible;
-                                label2.Visibility = Visibility.Hidden;
+
+                                listR.Clear();
+                                FirebaseResponse res = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                                var get = res.ResultAs<CounterC>();
+                                count = Convert.ToInt32(get.cnt);
+                                if (count != 0)
+                                {
+                                    progress.Value = 5;
+                                    progress.Visibility = Visibility.Visible;
+                                    int v = Convert.ToInt32(count);
+                                    for (int j = 1; j <= count; j++)
+                                    {
+                                        try
+                                        {
+                                            Load_ListR(j, v);
+                                        }
+                                        catch { }
+                                    }
+                                }
                             }
                             else
                             {
                                 dataGrid2.CanUserAddRows = false;
                                 dataGrid2.IsReadOnly = true;
+                                        delete.Visibility = Visibility.Hidden;
+                                        refresh.Visibility = Visibility.Hidden;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
-                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeO/" + picker.SelectedDate.Value.Day.ToString()
-                                        + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
+                                    string dds = picker.SelectedDate.Value.Day.ToString(),
+                                        mms = picker.SelectedDate.Value.Month.ToString(),
+                                        yys = picker.SelectedDate.Value.Year.ToString();
+                                    FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeO/" + dds + mms + yys);
                                     getO = resp.ResultAs<CounterO>();
                                     progress.Value = 10;
                                     if (getO.cnt != null && getO.cnt != "0")
                                     {
-                                        int count = Convert.ToInt32(getO.cnt), v = 10;
+                                        v = Convert.ToInt32(getO.cnt);
+                                        count = v;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
                                             {
-                                                FirebaseResponse response = await client.GetTaskAsync("Out/" + picker.SelectedDate.Value.Day.ToString()
-                                            + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + i);
-                                                Data data = response.ResultAs<Data>();
-                                                list.Add(data);
-                                                v += 80 / count;
-                                                progress.Value = v;
+                                                Load_List("Out/", dds, mms, yys, i);
                                             }
                                             catch { }
                                         }
-                                        label2.Visibility = Visibility.Hidden;
-                                        delete.Visibility = Visibility.Hidden;
-                                        refresh.Visibility = Visibility.Hidden;
-                                        dataGrid2.ItemsSource = null;
-                                        dataGrid2.ItemsSource = list;
-                                        dataGrid2.Visibility = Visibility.Visible;
                                     }
                                     else
                                     {
+                                        tab.IsEnabled = true;
+                                        reset.IsEnabled = true;
+                                        picker.IsEnabled = true;
+                                        progress.Visibility = Visibility.Hidden;
                                         label2.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
+                                        isLoading = false;
                                     }
                                 }
                                 catch
                                 {
+                                    tab.IsEnabled = true;
+                                    reset.IsEnabled = true;
+                                    picker.IsEnabled = true;
+                                    progress.Visibility = Visibility.Hidden;
                                     label2.Content = "Нет данных за " + picker.SelectedDate.Value.Date.ToShortDateString();
+                                    isLoading = false;
                                 }
                                 picker.IsDropDownOpen = true;
                             }
-                            progress.Value = 99;
-                            tab.IsEnabled = true;
                             break;
                         }
                 }
@@ -703,22 +706,77 @@ namespace Client
                         path = "Out/";
                     }
 
+                    string dds = date.Day.ToString(), mms = date.Month.ToString(), yys = date.Year.ToString();
                     for (int i = 1; i <= list.Count; i++)
                     {
-                        await client.SetTaskAsync(path + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i, list.ElementAt(i - 1));
+                        await client.SetTaskAsync(path + dds + mms + yys + i, list.ElementAt(i - 1));
                     }
                     goto r;
                 }
 
-                refresh.IsEnabled = true;
-                refresh.Content = "Обновить";
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
-            progress.Visibility = Visibility.Hidden;
-            tab.IsEnabled = true;
-            reset.IsEnabled = true;
-            picker.IsEnabled = true;
-            isLoading = false;
+        }
+
+        private async void Load_List(string path, string dds, string mms, string yys, int i)
+        {
+            FirebaseResponse response = await client.GetTaskAsync(path + dds + mms + yys + i);
+            Data data = response.ResultAs<Data>();
+            list.Add(data);
+            progress.Value += 70 / v;
+            if (list.Count == count || count == 0)
+            {
+                switch (pos)
+                {
+                    case 0:
+                        {
+                            dataGrid.ItemsSource = null;
+                            dataGrid.ItemsSource = list;
+                            dataGrid.Visibility = Visibility.Visible;
+                            label.Visibility = Visibility.Hidden;
+                            break;
+                        }
+                    case 1:
+                        {
+                            dataGrid1.ItemsSource = null;
+                            dataGrid1.ItemsSource = list;
+                            dataGrid1.Visibility = Visibility.Visible;
+                            label1.Visibility = Visibility.Hidden;
+                            break;
+                        }
+                    case 2:
+                        {
+                            dataGrid2.ItemsSource = null;
+                            dataGrid2.ItemsSource = list;
+                            dataGrid2.Visibility = Visibility.Visible;
+                            label2.Visibility = Visibility.Hidden;
+                            break;
+                        }
+                }
+                progress.Visibility = Visibility.Hidden;
+                tab.IsEnabled = true;
+                reset.IsEnabled = true;
+                refresh.IsEnabled = true;
+                refresh.Content = "Обновить";
+                picker.IsEnabled = true;
+                isLoading = false;
+            }
+        }
+
+        private async void Load_ListR(int i, int count)
+        {
+            tab.IsEnabled = false;
+            refresh.IsEnabled = false;
+            FirebaseResponse response = await client.GetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i);
+            Data data = response.ResultAs<Data>();
+            listR.Add(data);
+            progress.Value += 70 / v;
+            if (i == count)
+            {
+                tab.IsEnabled = true;
+                refresh.IsEnabled = true;
+                progress.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Free_Place()
@@ -774,7 +832,8 @@ namespace Client
         private void Button_Click_Refresh(object sender, RoutedEventArgs e)
         {
             refresh.Content = "...";
-            Load();
+            if (!isLoading)
+                Load();
         }
 
         private async void Button_Click_Delete(object sender, RoutedEventArgs e)
@@ -985,28 +1044,7 @@ namespace Client
                                 if (pos == 2)
                                 {
                                     listI.Clear();
-                                    listR.Clear();
-
-                                    FirebaseResponse res = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                                    var get = res.ResultAs<CounterC>();
-                                    progress.Value = 20;
-                                    int count = Convert.ToInt32(get.cnt);
-                                    if (count != 0)
-                                    {
-                                        int v = Convert.ToInt32(count), val = 20;
-                                        for (int j = 1; j <= count; j++)
-                                        {
-                                            try
-                                            {
-                                                FirebaseResponse response = await client.GetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + j);
-                                                Data data1 = response.ResultAs<Data>();
-                                                listR.Add(data1);
-                                                val += 30 / v;
-                                                progress.Value = val;
-                                            }
-                                            catch { }
-                                        }
-                                    }
+                                    
                                     FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id);
                                     ItemsCount getC = resp1.ResultAs<ItemsCount>();
                                     progress.Value = 55;
@@ -1027,6 +1065,7 @@ namespace Client
                                             }
                                             catch { }
                                         }
+
                                     }
                                     foreach (Data obj in listR)
                                     {
@@ -1034,9 +1073,23 @@ namespace Client
                                         {
                                             if (item.Name == obj.Name)
                                             {
-                                                obj.Now = (
-                                                    Convert.ToDouble(obj.Now) - Convert.ToDouble(item.Now) * newV
-                                                    ).ToString();
+                                                try
+                                                {
+                                                    Convert.ToDouble(item.Now);
+                                                }
+                                                catch
+                                                {
+                                                    item.Now = "0";
+                                                }
+                                                try
+                                                {
+                                                    Convert.ToDouble(obj.Now);
+                                                }
+                                                catch
+                                                {
+                                                    obj.Now = "0";
+                                                }
+                                                obj.Now = (Convert.ToDouble(obj.Now) - Convert.ToDouble(item.Now) * newV).ToString();
                                                 await client.SetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + obj.Id, obj);
                                                 break;
                                             }
@@ -1088,6 +1141,27 @@ namespace Client
                         catch
                         {
                             MessageBox.Show("Некорректность вводимых или хранимых данных.");
+                            switch (pos)
+                            {
+                                case 0:
+                                    {
+                                        dataGrid.Items.Refresh();
+                                        dataGrid.IsEnabled = true;
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        dataGrid1.Items.Refresh();
+                                        dataGrid1.IsEnabled = true;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        dataGrid2.Items.Refresh();
+                                        dataGrid2.IsEnabled = true;
+                                        break;
+                                    }
+                            }
                         }
                     }
                 }
@@ -1142,7 +1216,9 @@ namespace Client
 
                 if (setItems.ShowDialog() == true)
                 {
-                    if (picker.SelectedDate.Value == date)
+                    if (picker.SelectedDate.Value.Day == date.Day &&
+                        picker.SelectedDate.Value.Month == date.Month &&
+                        picker.SelectedDate.Value.Year == date.Year)
                     {
                         progress.Value = 0;
                         progress.Visibility = Visibility.Visible;

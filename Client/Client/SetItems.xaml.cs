@@ -20,6 +20,9 @@ namespace Client
     public partial class SetItems : Window
     {
         string name, id, key;
+        string dds, mms, yys;
+
+        bool waitS = true, waitI = true;
         DateTime date = DateTime.Now;
         DatePicker picker = new DatePicker();
         List<Data> listS = new List<Data>();
@@ -41,6 +44,10 @@ namespace Client
             this.id = id;
             this.key = key;
             this.picker = picker;
+            this.dds = picker.SelectedDate.Value.Day.ToString();
+            this.mms = picker.SelectedDate.Value.Month.ToString();
+            this.yys = picker.SelectedDate.Value.Year.ToString();
+
             client = new FireSharp.FirebaseClient(config);
             labelR.Content = "Комплектация \"" + name + "\"";
             if (picker.SelectedDate.Value.Day != date.Day || picker.SelectedDate.Value.Month != date.Month || picker.SelectedDate.Value.Year != date.Year)
@@ -53,11 +60,10 @@ namespace Client
                 dataGridS.IsEnabled = true;
                 dataGridR.IsEnabled = true;
             }
-            Load();
+            LoadS();
         }
 
-
-        private async void Load()
+        private async void LoadS()
         {
             try
             {
@@ -68,85 +74,116 @@ namespace Client
                 listС.Clear();
                 listI.Clear();
 
-                FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + picker.SelectedDate.Value.Day.ToString()
-                    + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString());
+                FirebaseResponse resp = await client.GetTaskAsync("Counter/nodeC/" + dds + mms + yys);
                 CounterC get = resp.ResultAs<CounterC>();
                 progress.Value = 10;
 
                 int count = Convert.ToInt32(get.cnt);
                 if (count != 0)
                 {
-                    int v = Convert.ToInt32(count), val = 10;
                     for (int i = 1; i <= count; i++)
                     {
                         try
                         {
-                            FirebaseResponse response = await client.GetTaskAsync("Category/" + picker.SelectedDate.Value.Day.ToString()
-                    + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + i);
-                            Data data = response.ResultAs<Data>();
-                            listS.Add(data);
-                            val += 20 / v;
-                            progress.Value = val;
+                            Load_S(dds, mms, yys, i, count);
                         }
-                        catch { }
+                        catch
+                        {
+                            dataGridS.ItemsSource = null;
+                            dataGridS.ItemsSource = listS;
+
+                            dataGridR.ItemsSource = null;
+                            dataGridR.ItemsSource = listR;
+
+                            progress.Visibility = Visibility.Hidden;
+
+                            labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
+                            labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
+                        }
                     }
                 }
-
-                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + picker.SelectedDate.Value.Day.ToString()
-                    + picker.SelectedDate.Value.Month.ToString() + picker.SelectedDate.Value.Year.ToString() + id);
-                ItemsCount getC = resp1.ResultAs<ItemsCount>();
-                count = Convert.ToInt32(getC.cnt);
-                if (count != 0)
+                else
                 {
-                    int v = Convert.ToInt32(count), val = 35; ;
-                    for (int i = 1; i <= count; i++)
-                    {
-                        try
-                        {
-                            FirebaseResponse response = await client.GetTaskAsync("Out/" + key + "/" + i);
-                            Item itemsR = response.ResultAs<Item>();
-                            listI.Add(itemsR);
-                            val += 35 / v;
-                            progress.Value = val;
-                        }
-                        catch { }
-                    }
 
-                    int l = listS.Count;
-                    foreach (Item item in listI)
-                        for (int i = 0; i < l; i++)
-                        {
-                            if (listS.ElementAt(i).Name == item.Name)
-                            {
-                                Data d = listS.ElementAt(i);
-                                DataC dataC = new DataC();
-                                dataC.Id = d.Id;
-                                dataC.Name = d.Name;
-                                dataC.Now = d.Now;
-                                listС.Add(dataC);
-                                listS.Remove(d);
-                                val += 30 / l;
-                                progress.Value = val;
-                                l--;
-                                d.Rem = d.Now;
-                                d.Now = item.Now;
-                                listR.Add(d);
-                            }
-                        }
-                    labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
                 }
-
-                dataGridS.ItemsSource = null;
-                dataGridS.ItemsSource = listS;
-
-                dataGridR.ItemsSource = null;
-                dataGridR.ItemsSource = listR;
-
-                labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
-            progress.Visibility = Visibility.Hidden;
         }
+
+        private async void LoadI()
+        {
+            try
+            {              
+                FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + dds + mms + yys + id);
+                ItemsCount getC = resp1.ResultAs<ItemsCount>();
+                int count = Convert.ToInt32(getC.cnt);
+                if (count != 0)
+                {
+                    for (int i = 1; i <= count; i++)
+                    {
+                        Load_I(i, count);
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private async void Load_S(string dds, string mms, string yys, int i, int count)
+        {
+            FirebaseResponse response = await client.GetTaskAsync("Category/" + dds + mms + yys + i);
+            Data data = response.ResultAs<Data>();
+            listS.Add(data);
+            progress.Value += 35 / count;
+            if (listS.Count == count)
+                LoadI();
+        }
+
+        private async void Load_I(int i, int count)
+        {
+            FirebaseResponse response = await client.GetTaskAsync("Out/" + key + "/" + i);
+            Item itemsR = response.ResultAs<Item>();
+            listI.Add(itemsR);
+            progress.Value += 20 / count;
+            if (listI.Count == count)
+                Sort();
+        }
+
+        void Sort()
+        {
+            progress.Value = 60;
+            int l = listS.Count;
+            foreach (Item item in listI)
+                for (int i = 0; i < l; i++)
+                {
+                    if (listS.ElementAt(i).Name == item.Name)
+                    {
+                        Data d = listS.ElementAt(i);
+                        DataC dataC = new DataC();
+                        dataC.Id = d.Id;
+                        dataC.Name = d.Name;
+                        dataC.Now = d.Now;
+                        listС.Add(dataC);
+                        listS.Remove(d);
+                        progress.Value += 30 / l;
+                        l--;
+                        d.Rem = d.Now;
+                        d.Now = item.Now;
+                        listR.Add(d);
+                    }
+                }
+
+            dataGridS.ItemsSource = null;
+            dataGridS.ItemsSource = listS;
+
+            dataGridR.ItemsSource = null;
+            dataGridR.ItemsSource = listR;
+
+            progress.Visibility = Visibility.Hidden;
+
+            labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
+            labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
+        }
+
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
