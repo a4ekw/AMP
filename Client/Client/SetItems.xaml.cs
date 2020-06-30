@@ -19,10 +19,9 @@ namespace Client
 {
     public partial class SetItems : Window
     {
+        bool loading;
         string name, id, key;
         string dds, mms, yys;
-
-        bool waitS = true, waitI = true;
         DateTime date = DateTime.Now;
         DatePicker picker = new DatePicker();
         List<Data> listS = new List<Data>();
@@ -60,11 +59,13 @@ namespace Client
                 dataGridS.IsEnabled = true;
                 dataGridR.IsEnabled = true;
             }
-            LoadS();
+            if (loading == false)
+                LoadS();
         }
 
         private async void LoadS()
         {
+            loading = true;
             try
             {
                 progress.Value = 0;
@@ -102,12 +103,23 @@ namespace Client
                         }
                     }
                 }
-                else
-                {
-
-                }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private async void Load_S(string dds, string mms, string yys, int i, int count)
+        {
+            int v = count;
+            try
+            {
+                FirebaseResponse response = await client.GetTaskAsync("Category/" + dds + mms + yys + i);
+                Data data = response.ResultAs<Data>();
+                listS.Add(data);
+            }
+            catch { v -= 1; }
+            progress.Value += 35 / count;
+            if (listS.Count == v)
+                LoadI();
         }
 
         private async void LoadI()
@@ -124,54 +136,53 @@ namespace Client
                         Load_I(i, count);
                     }
                 }
+                else Sort();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        private async void Load_S(string dds, string mms, string yys, int i, int count)
-        {
-            FirebaseResponse response = await client.GetTaskAsync("Category/" + dds + mms + yys + i);
-            Data data = response.ResultAs<Data>();
-            listS.Add(data);
-            progress.Value += 35 / count;
-            if (listS.Count == count)
-                LoadI();
-        }
-
         private async void Load_I(int i, int count)
         {
-            FirebaseResponse response = await client.GetTaskAsync("Out/" + key + "/" + i);
-            Item itemsR = response.ResultAs<Item>();
-            listI.Add(itemsR);
+            int v = count;
+            try
+            {
+                FirebaseResponse response = await client.GetTaskAsync("Out/" + key + "/" + i);
+                Item itemsR = response.ResultAs<Item>();
+                listI.Add(itemsR);
+            }
+            catch { v--; }
             progress.Value += 20 / count;
-            if (listI.Count == count)
+            if (listI.Count == v)
                 Sort();
         }
 
         void Sort()
         {
-            progress.Value = 60;
-            int l = listS.Count;
-            foreach (Item item in listI)
-                for (int i = 0; i < l; i++)
-                {
-                    if (listS.ElementAt(i).Name == item.Name)
+            try
+            {
+                progress.Value = 60;
+                int l = listS.Count;
+                foreach (Item item in listI)
+                    for (int i = 0; i < l; i++)
                     {
-                        Data d = listS.ElementAt(i);
-                        DataC dataC = new DataC();
-                        dataC.Id = d.Id;
-                        dataC.Name = d.Name;
-                        dataC.Now = d.Now;
-                        listС.Add(dataC);
-                        listS.Remove(d);
-                        progress.Value += 30 / l;
-                        l--;
-                        d.Rem = d.Now;
-                        d.Now = item.Now;
-                        listR.Add(d);
+                        if (listS.ElementAt(i).Name == item.Name)
+                        {
+                            Data d = listS.ElementAt(i);
+                            DataC dataC = new DataC();
+                            dataC.Id = d.Id;
+                            dataC.Name = d.Name;
+                            dataC.Now = d.Now;
+                            listС.Add(dataC);
+                            listS.Remove(d);
+                            progress.Value += 30 / l;
+                            l--;
+                            d.Rem = d.Now;
+                            d.Now = item.Now;
+                            listR.Add(d);
+                        }
                     }
-                }
-
+            }
+            catch { }
             dataGridS.ItemsSource = null;
             dataGridS.ItemsSource = listS;
 
@@ -179,7 +190,7 @@ namespace Client
             dataGridR.ItemsSource = listR;
 
             progress.Visibility = Visibility.Hidden;
-
+            loading = false;
             labelS.Content = "Вся комплектация на складе (" + listS.Count + " ед.)";
             labelR.Content = "Комплектация \"" + name + "\" (" + listR.Count + " ед.)";
         }

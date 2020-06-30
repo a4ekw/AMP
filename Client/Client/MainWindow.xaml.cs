@@ -22,8 +22,8 @@ namespace Client
         static List<Data> list = new List<Data>();
         static List<Data> listR = new List<Data>();
         static List<Item> listI = new List<Item>();
-        int pos = 0, v, check = 0;
-        int? count = null;
+        int pos = 0, v;
+        int? count = null, value;
         bool isToday = true, isLoading = false;
 
         IFirebaseClient client;
@@ -44,7 +44,7 @@ namespace Client
 
         private void Trial()
         {
-            if (date.Month >= 8 || date.Year > 2020)
+            if (date.Month >= 9 || date.Year > 2020)
             {
                 if (date.Day == 18)
                 {
@@ -70,7 +70,6 @@ namespace Client
         private async void Load()
         {
             isLoading = true;
-            r:
             refresh.IsEnabled = false;
             reset.IsEnabled = false;
             picker.IsEnabled = false;
@@ -103,6 +102,7 @@ namespace Client
                                 string month = "";
                                 progress.Value = 10;
                                 count = null;
+                                getC.cnt = null;
                                 while (count == null)
                                 {
                                     switch (mm)
@@ -207,6 +207,8 @@ namespace Client
                                 string dds = dd.ToString(), mms = mm.ToString(), yys = yy.ToString();
                                 progress.Value = 20;
                                 v = Convert.ToInt32(count);
+
+                                value = count;
                                 if (count != 0)
                                     for (int i = 1; i <= count; i++)
                                     {
@@ -236,6 +238,7 @@ namespace Client
                                     {
                                         v = Convert.ToInt32(getC.cnt);
                                         count = v;
+                                        value = count;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -284,6 +287,7 @@ namespace Client
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
                                 count = null;
+                                getP.cnt = null;
                                 string month = "";
                                 progress.Value = 10;
                                 while (count == null)
@@ -391,6 +395,8 @@ namespace Client
                                 string dds = dd.ToString(), mms = mm.ToString(), yys = yy.ToString();
                                 progress.Value = 20;
                                 v = Convert.ToInt32(count);
+
+                                value = count;
                                 if (count != 0)
                                     for (int i = 1; i <= count; i++)
                                     {
@@ -405,8 +411,8 @@ namespace Client
                             {
                                 dataGrid1.CanUserAddRows = false;
                                 dataGrid1.IsReadOnly = true;
-                                        delete.Visibility = Visibility.Hidden;
-                                        refresh.Visibility = Visibility.Hidden;
+                                delete.Visibility = Visibility.Hidden;
+                                refresh.Visibility = Visibility.Hidden;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
@@ -420,6 +426,7 @@ namespace Client
                                     {
                                         v = Convert.ToInt32(getP.cnt);
                                         count = v;
+                                        value = count;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -454,13 +461,12 @@ namespace Client
                         }
                     case 2:
                         {
-                            label2.Visibility = Visibility.Visible;
                             dataGrid2.Visibility = Visibility.Hidden;
                             dataGrid2.Items.Refresh();
+                            label2.Visibility = Visibility.Visible;
                             tab.IsEnabled = false;
                             progress.Value = 0;
                             progress.Visibility = Visibility.Visible;
-
 
                             if (isToday)
                             {
@@ -469,6 +475,7 @@ namespace Client
                                 delete.Visibility = Visibility.Visible;
                                 refresh.Visibility = Visibility.Visible;
                                 count = null;
+                                getO.cnt = null;
                                 string month = "";
                                 progress.Value = 10;
                                 while (count == null)
@@ -576,6 +583,7 @@ namespace Client
                                 string dds = dd.ToString(), mms = mm.ToString(), yys = yy.ToString();
                                 progress.Value = 20;
                                 v = Convert.ToInt32(count);
+                                value = count;
                                 if (count != 0)
                                     for (int i = 1; i <= count; i++)
                                     {
@@ -585,32 +593,13 @@ namespace Client
                                         }
                                         catch { }
                                     }
-
-                                listR.Clear();
-                                FirebaseResponse res = await client.GetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                                var get = res.ResultAs<CounterC>();
-                                count = Convert.ToInt32(get.cnt);
-                                if (count != 0)
-                                {
-                                    progress.Value = 5;
-                                    progress.Visibility = Visibility.Visible;
-                                    int v = Convert.ToInt32(count);
-                                    for (int j = 1; j <= count; j++)
-                                    {
-                                        try
-                                        {
-                                            Load_ListR(j, v);
-                                        }
-                                        catch { }
-                                    }
-                                }
                             }
                             else
                             {
                                 dataGrid2.CanUserAddRows = false;
                                 dataGrid2.IsReadOnly = true;
-                                        delete.Visibility = Visibility.Hidden;
-                                        refresh.Visibility = Visibility.Hidden;
+                                delete.Visibility = Visibility.Hidden;
+                                refresh.Visibility = Visibility.Hidden;
                                 label.Content = "Поиск данных за " + picker.SelectedDate.Value.Date.ToShortDateString() + "...";
                                 try
                                 {
@@ -624,6 +613,7 @@ namespace Client
                                     {
                                         v = Convert.ToInt32(getO.cnt);
                                         count = v;
+                                        value = count;
                                         for (int i = 1; i <= count; i++)
                                         {
                                             try
@@ -658,73 +648,25 @@ namespace Client
                         }
                 }
 
-                if (dd != date.Day || mm != date.Month || yy != date.Year)
-                {
-                    switch (tab.SelectedIndex)
-                    {
-                        case 0:
-                            {
-                                var obj = new CounterC
-                                {
-                                    cnt = list.Count.ToString(),
-                                };
-                                await client.SetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
-                                break;
-                            }
-                        case 1:
-                            {
-                                var obj = new CounterP
-                                {
-                                    cnt = list.Count.ToString()
-                                };
-                                await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
-                                break;
-                            }
-                        case 2:
-                            {
-                                var obj = new CounterO
-                                {
-                                    cnt = list.Count.ToString()
-                                };
-                                await client.SetTaskAsync("Counter/nodeO/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
-                                break;
-                            }
-
-                    }
-                    string path = "";
-
-                    if (pos == 0)
-                    {
-                        path = "Category/";
-                    }
-                    else if (pos == 1)
-                    {
-                        path = "Products/";
-                    }
-                    else if (pos == 2)
-                    {
-                        path = "Out/";
-                    }
-
-                    string dds = date.Day.ToString(), mms = date.Month.ToString(), yys = date.Year.ToString();
-                    for (int i = 1; i <= list.Count; i++)
-                    {
-                        await client.SetTaskAsync(path + dds + mms + yys + i, list.ElementAt(i - 1));
-                    }
-                    goto r;
-                }
-
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private async void Load_List(string path, string dds, string mms, string yys, int i)
         {
-            FirebaseResponse response = await client.GetTaskAsync(path + dds + mms + yys + i);
-            Data data = response.ResultAs<Data>();
-            list.Add(data);
-            progress.Value += 70 / v;
-            if (list.Count == count || count == 0)
+            try
+            {
+                FirebaseResponse response = await client.GetTaskAsync(path + dds + mms + yys + i);
+                Data datal = response.ResultAs<Data>();
+                list.Add(datal);
+            }
+            catch
+            {
+                --value;
+            }
+            if (v != 0)
+                progress.Value += 70 / v;
+            if (list.Count == value)
             {
                 switch (pos)
                 {
@@ -753,6 +695,60 @@ namespace Client
                             break;
                         }
                 }
+                if (isToday)
+                    if (dds != date.Day.ToString() || mms != date.Month.ToString() || yys != date.Year.ToString())
+                    {
+                        switch (tab.SelectedIndex)
+                        {
+                            case 0:
+                                {
+                                    var obj = new CounterC
+                                    {
+                                        cnt = list.Count.ToString(),
+                                    };
+                                    await client.SetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    var obj = new CounterP
+                                    {
+                                        cnt = list.Count.ToString()
+                                    };
+                                    await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    var obj = new CounterO
+                                    {
+                                        cnt = list.Count.ToString()
+                                    };
+                                    await client.SetTaskAsync("Counter/nodeO/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    break;
+                                }
+
+                        }
+
+                        if (pos == 0)
+                        {
+                            path = "Category/";
+                        }
+                        else if (pos == 1)
+                        {
+                            path = "Products/";
+                        }
+                        else if (pos == 2)
+                        {
+                            path = "Out/";
+                        }
+
+                        dds = date.Day.ToString(); mms = date.Month.ToString(); yys = date.Year.ToString();
+                        for (int j = 1; j <= list.Count; j++)
+                        {
+                            Upload_List(path, dds, mms, yys, j);
+                        }
+                    }
                 progress.Visibility = Visibility.Hidden;
                 tab.IsEnabled = true;
                 reset.IsEnabled = true;
@@ -761,22 +757,19 @@ namespace Client
                 picker.IsEnabled = true;
                 isLoading = false;
             }
+
         }
 
-        private async void Load_ListR(int i, int count)
+        private async void Upload_List(string path, string dds, string mms, string yys, int j)
         {
-            tab.IsEnabled = false;
-            refresh.IsEnabled = false;
-            FirebaseResponse response = await client.GetTaskAsync("Category/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + i);
-            Data data = response.ResultAs<Data>();
-            listR.Add(data);
-            progress.Value += 70 / v;
-            if (i == count)
+            try
             {
+                tab.IsEnabled = false;
+                await client.SetTaskAsync(path + dds + mms + yys + j, list.ElementAt(j - 1));
                 tab.IsEnabled = true;
-                refresh.IsEnabled = true;
-                progress.Visibility = Visibility.Hidden;
             }
+            catch
+            { }
         }
 
         private void Free_Place()
@@ -1044,7 +1037,7 @@ namespace Client
                                 if (pos == 2)
                                 {
                                     listI.Clear();
-                                    
+
                                     FirebaseResponse resp1 = await client.GetTaskAsync("Out/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id);
                                     ItemsCount getC = resp1.ResultAs<ItemsCount>();
                                     progress.Value = 55;
