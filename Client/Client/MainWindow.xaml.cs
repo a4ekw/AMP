@@ -16,7 +16,7 @@ namespace Client
         CounterC getC = new CounterC();
         CounterP getP = new CounterP();
         CounterO getO = new CounterO();
-        DateTime date = DateTime.Now;
+        DateTime date;
         DateTime? selectedDate;
         static List<int> free = new List<int>();
         static List<Data> list = new List<Data>();
@@ -37,12 +37,13 @@ namespace Client
         {
             InitializeComponent();
             client = new FireSharp.FirebaseClient(config);
+            date = DateTime.Now;
             picker.SelectedDate = date;
-            Load();
         }
 
         private async void Load()
         {
+            date = DateTime.Now;
             isLoading = true;
             refresh.IsEnabled = false;
             reset.IsEnabled = false;
@@ -623,7 +624,7 @@ namespace Client
                 }
 
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message + "(Load)"); }
         }
 
         private async void Load_List(string path, string dds, string mms, string yys, int i)
@@ -681,6 +682,7 @@ namespace Client
                                         cnt = list.Count.ToString(),
                                     };
                                     await client.SetTaskAsync("Counter/nodeC/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    path = "Category/";
                                     break;
                                 }
                             case 1:
@@ -690,6 +692,7 @@ namespace Client
                                         cnt = list.Count.ToString()
                                     };
                                     await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    path = "Products/";
                                     break;
                                 }
                             case 2:
@@ -699,22 +702,10 @@ namespace Client
                                         cnt = list.Count.ToString()
                                     };
                                     await client.SetTaskAsync("Counter/nodeO/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    path = "Out/";
                                     break;
                                 }
 
-                        }
-
-                        if (pos == 0)
-                        {
-                            path = "Category/";
-                        }
-                        else if (pos == 1)
-                        {
-                            path = "Products/";
-                        }
-                        else if (pos == 2)
-                        {
-                            path = "Out/";
                         }
 
                         dds = date.Day.ToString(); mms = date.Month.ToString(); yys = date.Year.ToString();
@@ -793,7 +784,7 @@ namespace Client
                 }
 
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message + "(Free_Place)"); }
         }
 
         private void Button_Click_Refresh(object sender, RoutedEventArgs e)
@@ -1135,9 +1126,9 @@ namespace Client
                         }
                     }
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
+                catch (Exception ex) { MessageBox.Show(ex.Message + "(dataGrid_RowEditEnding1)"); }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message + "(dataGrid_RowEditEnding2)"); }
             progress.Visibility = Visibility.Hidden;
         }
 
@@ -1181,22 +1172,21 @@ namespace Client
         {
             try
             {
-
                 switch (pos)
                 {
                     case 0:
                         {
-                            dataGrid.CommitEdit();
+                            dataGrid.CancelEdit(DataGridEditingUnit.Row);
                             break;
                         }
                     case 1:
                         {
-                            dataGrid1.CommitEdit();
+                            dataGrid1.CancelEdit(DataGridEditingUnit.Row);
                             break;
                         }
                     case 2:
                         {
-                            dataGrid2.CommitEdit();
+                            dataGrid2.CancelEdit(DataGridEditingUnit.Row);
                             break;
                         }
                 }
