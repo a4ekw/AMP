@@ -36,35 +36,9 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
-            Trial();
             client = new FireSharp.FirebaseClient(config);
             picker.SelectedDate = date;
             Load();
-        }
-
-        private void Trial()
-        {
-            if (date.Month >= 9 || date.Year > 2020)
-            {
-                if (date.Day == 18)
-                {
-                    MessageBox.Show("Осталось 3 дня пробного периода.");
-                }
-                if (date.Day == 19)
-                {
-                    MessageBox.Show("Осталось 3 дня пробного периода.");
-                }
-                if (date.Day == 20)
-                {
-                    MessageBox.Show("Остался 1 день пробного периода.");
-                    Application.Current.Shutdown();
-                }
-                if (date.Day > 20)
-                {
-                    MessageBox.Show("Пробный период истек.");
-                    Application.Current.Shutdown();
-                }
-            }
         }
 
         private async void Load()
@@ -861,21 +835,24 @@ namespace Client
                     await client.DeleteTaskAsync(path + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + d.Id);
                     list.Remove(d);
                     progress.Value = 70;
-                    switch (tab.SelectedIndex)
+                    switch (pos)
                     {
                         case 0:
                             {
-                                dataGrid.Items.Refresh();
+                                dataGrid.ItemsSource = null;
+                                dataGrid.ItemsSource = list;
                                 break;
                             }
                         case 1:
                             {
-                                dataGrid1.Items.Refresh();
+                                dataGrid1.ItemsSource = null;
+                                dataGrid1.ItemsSource = list;
                                 break;
                             }
                         case 2:
                             {
-                                dataGrid2.Items.Refresh();
+                                dataGrid2.ItemsSource = null;
+                                dataGrid2.ItemsSource = list;
                                 break;
                             }
                     }
@@ -1158,7 +1135,7 @@ namespace Client
                         }
                     }
                 }
-                catch { }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
             progress.Visibility = Visibility.Hidden;
@@ -1204,6 +1181,25 @@ namespace Client
         {
             try
             {
+
+                switch (pos)
+                {
+                    case 0:
+                        {
+                            dataGrid.CommitEdit();
+                            break;
+                        }
+                    case 1:
+                        {
+                            dataGrid1.CommitEdit();
+                            break;
+                        }
+                    case 2:
+                        {
+                            dataGrid2.CommitEdit();
+                            break;
+                        }
+                }
                 Data data = dataGrid2.SelectedItem as Data;
                 SetItems setItems = new SetItems(data.Name, data.Id, data.Key, picker);
 

@@ -19,7 +19,8 @@ namespace Client
 {
     public partial class SetItems : Window
     {
-        bool loading;
+        int v;
+        bool loading = false;
         string name, id, key;
         string dds, mms, yys;
         DateTime date = DateTime.Now;
@@ -82,6 +83,7 @@ namespace Client
                 int count = Convert.ToInt32(get.cnt);
                 if (count != 0)
                 {
+                    v = Convert.ToInt32(count);
                     for (int i = 1; i <= count; i++)
                     {
                         try
@@ -109,14 +111,16 @@ namespace Client
 
         private async void Load_S(string dds, string mms, string yys, int i, int count)
         {
-            int v = count;
             try
             {
                 FirebaseResponse response = await client.GetTaskAsync("Category/" + dds + mms + yys + i);
                 Data data = response.ResultAs<Data>();
                 listS.Add(data);
             }
-            catch { v -= 1; }
+            catch 
+            { 
+                v -= 1;
+            }
             progress.Value += 35 / count;
             if (listS.Count == v)
                 LoadI();

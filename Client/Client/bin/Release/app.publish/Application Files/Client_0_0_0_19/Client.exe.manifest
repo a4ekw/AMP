@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
-  <asmv1:assemblyIdentity name="Client.exe" version="0.0.0.9" publicKeyToken="0000000000000000" language="ru-BY" processorArchitecture="msil" type="win32" />
+  <asmv1:assemblyIdentity name="Client.exe" version="0.0.0.19" publicKeyToken="d9c93c90b1f378d9" language="ru-BY" processorArchitecture="msil" type="win32" />
   <description asmv2:publisher="LMV" co.v1:suiteName="FBCI" asmv2:product="FBC" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
@@ -44,14 +44,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Client.exe" size="70624">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Client.exe" size="57312">
       <assemblyIdentity name="Client" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>NR43BrJbFGE61Dn7kbD+xzHMwYlKdKRJQG9pRVVE9Jg=</dsig:DigestValue>
+        <dsig:DigestValue>E7COBTivYYIEKa42ToJYBnYxic9J741Q2IU+/ht6dtI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -103,13 +103,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Client.exe.config" size="538">
+  <file name="Client.exe.config" size="540">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>5T0HL/w/t/fI7jpvd5AT4Xcllfi6saJWUzNbdIir0MM=</dsig:DigestValue>
+      <dsig:DigestValue>hP1K2GAukck28DpOFUJC0WQHdnDg8f3q7NWbuO/dD14=</dsig:DigestValue>
     </hash>
   </file>
-</asmv1:assembly>
+<publisherIdentity name="CN=DESKTOP-P7IHDNF\a4ekw" issuerKeyHash="8b504cc7311c18de6e1f033f11886c9f33969e4f" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>hH33qkm2aCxxKdGFEWFL2q8eg2AfBuA6IWdf5Wgx9v0=</DigestValue></Reference></SignedInfo><SignatureValue>laPRuotJMpdPZmwihU2HMuj5kavpGB0bzmdobp8hJmUmRqIc1+Np2v0/UGa7EgM/cKTDG7fGCeFW084gtGpzNfYbM1b6K5qtGW+5HQW0L93rNowYJjhd9535UVX6rFeglIncUhs1NyZgf4KFhQUREsachtY5QDe3kaE+zo3wWyc=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>vasdOmKaYfLTEXH1yr4xJ8Fy2Ycig+5S73kDHGIRgst+KI7085g45P19By7TB+qBylLke30OtGFUQulbow8mBr2CmIKhUTrDiHzGc+994Ck9KnvEVb/mrS/1hsr9OblpwT+wPEVrCWu+2kCBFUK56eLgyI7O6ppXqEcSw3p/m3k=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="fdf63168e55f67213ae0061f60831eafda4b611185d129712c68b649aaf77d84" Description="" Url=""><as:assemblyIdentity name="Client.exe" version="0.0.0.19" publicKeyToken="d9c93c90b1f378d9" language="ru-BY" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=DESKTOP-P7IHDNF\a4ekw</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>nSHFx7kcCIVeUzBJfMnN2Gbx0mX9IA9ipCGqmvf7lEY=</DigestValue></Reference></SignedInfo><SignatureValue>fz/NhdKCwpRZdOy4GPFIc0tKuDRZlGUTgPaErS88IxQbYcitJGGNN8hqRNcjglutwGlFp/FAjLyGTTOuR4EHe30CXONFp4Vcyx8L7yunTe/INDdzOBm79SearHcmvV2Snbp9c5DWqy2vfdzSL9nQnTHlgvKuEPWG7GkmO7m2S8Q=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>vasdOmKaYfLTEXH1yr4xJ8Fy2Ycig+5S73kDHGIRgst+KI7085g45P19By7TB+qBylLke30OtGFUQulbow8mBr2CmIKhUTrDiHzGc+994Ck9KnvEVb/mrS/1hsr9OblpwT+wPEVrCWu+2kCBFUK56eLgyI7O6ppXqEcSw3p/m3k=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB7TCCAVagAwIBAgIQFXRoV7ps+ZRBomzrG6J0ajANBgkqhkiG9w0BAQsFADA1MTMwMQYDVQQDHioARABFAFMASwBUAE8AUAAtAFAANwBJAEgARABOAEYAXABhADQAZQBrAHcwHhcNMjAwNjE5MTMyMTIwWhcNMjEwNjE5MTkyMTIwWjA1MTMwMQYDVQQDHioARABFAFMASwBUAE8AUAAtAFAANwBJAEgARABOAEYAXABhADQAZQBrAHcwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAL2rHTpimmHy0xFx9cq+MSfBctmHIoPuUu95AxxiEYLLfiiO9POYOOT9fQcu0wfqgcpS5Ht9DrRhVELpW6MPJga9gpiCoVE6w4h8xnPvfeApPSp7xFW/5q0v9YbK/Tm5acE/sDxFawlrvtpAgRVCueni4MiOzuqaV6hHEsN6f5t5AgMBAAEwDQYJKoZIhvcNAQELBQADgYEASX9q0ci9smhx1u6HIgp6i5GPEG0a1jUAlIKA0Hw1XyLVgsusnmSbP0YCWlp8xYRZPYTjcwEBgHAIQ8DQaPoKq98n+en9gmQk/CLgI1+E8SWMFqBlm/Ha/v0NmMMWUuQ7OaKd5MP85ORbmZqurCUDiw57vjcgvh4pG5k4dePKtD8=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
