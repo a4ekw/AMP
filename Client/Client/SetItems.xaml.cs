@@ -33,7 +33,7 @@ namespace Client
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
         {
-            AuthSecret = "q1oz56hqzen6Qlx8zp4gbMH5EgGCsF6AkY50ZKHc",
+            AuthSecret = "",
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 

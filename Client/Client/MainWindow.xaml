@@ -56,7 +56,7 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
+                            <DataGridTextColumn Header="Последнее поступление" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -153,7 +153,7 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
+                            <DataGridTextColumn Header="Последнее поступление" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -165,6 +165,35 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
+
+
+
+                            <DataGridTextColumn Header="Списание" Binding="{Binding NewS, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Последнее списание" Binding="{Binding LastS, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
 
                             <DataGridTextColumn Header="Итог" Binding="{Binding All, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
                                 <DataGridTextColumn.HeaderStyle>
@@ -250,7 +279,7 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.2*">
+                            <DataGridTextColumn Header="Последнее поступление" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.2*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />

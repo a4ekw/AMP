@@ -8,7 +8,9 @@
         public string All { get; set; }
         public string Now { get; set; }
         public string New { get; set; }
+        public string NewS { get; set; }
         public string Last { get; set; }
+        public string LastS { get; set; }
         public string Note { get; set; }
         public string cnt { get; set; }
         public string Key { get; set; }

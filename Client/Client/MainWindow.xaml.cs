@@ -33,7 +33,7 @@ namespace Client
         IFirebaseClient client;
         IFirebaseConfig config = new FirebaseConfig
         {
-            AuthSecret = "q1oz56hqzen6Qlx8zp4gbMH5EgGCsF6AkY50ZKHc",
+            AuthSecret = "",
             BasePath = "https://project-b58e4.firebaseio.com/"
         };
 
@@ -1032,46 +1032,7 @@ namespace Client
 
                 try
                 {
-                    if (data.New == null)
-                    {
-
-                        if (data.Name != null)
-                            if (data.Id == null)
-                            {
-                                Free_Place();
-                                if (free.Count != 0)
-                                {
-                                    data.Id = free.ElementAt(0).ToString();
-                                    progress.Value = 60;
-                                    await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + free.ElementAt(0).ToString(), data);
-                                    free.RemoveAt(0);
-                                    progress.Value = 99;
-                                }
-                                else
-                                {
-                                    int value = 0;
-                                    FirebaseResponse resp2 = await client.GetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
-                                    getP = resp2.ResultAs<CounterP>();
-                                    value = Convert.ToInt32(getP.cnt) + 1;
-
-                                    data.Id = value.ToString();
-                                    await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + value.ToString(), data);
-                                    progress.Value = 200;
-                                    var obj = new CounterP
-                                    {
-                                        cnt = value.ToString(),
-                                    };
-                                    await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
-                                    progress.Value = 99;
-                                }
-                            }
-                            else
-                            {
-                                await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id, data);
-                                progress.Value = 99;
-                            }
-                    }
-                    else
+                    if (data.New != null)
                     {
                         try
                         {
@@ -1134,6 +1095,107 @@ namespace Client
                             dataGrid1.Items.Refresh();
                             dataGrid1.IsEnabled = true;
                         }
+                    }
+                    else if (data.NewS != null)
+                    {
+                        try
+                        {
+                            dataGrid1.IsEnabled = false;
+
+                            if (data.Name != null)
+                            {
+                                int i = list1.IndexOf(data);
+                                double all, now, newV;
+
+                                try
+                                {
+                                    all = Convert.ToDouble(data.Now);
+                                }
+                                catch
+                                {
+                                    all = 0;
+                                }
+
+                                try
+                                {
+                                    now = Convert.ToDouble(data.Now);
+                                }
+                                catch
+                                {
+                                    now = 0;
+                                }
+                                try
+                                {
+                                    newV = Convert.ToDouble(data.NewS);
+                                }
+                                catch
+                                {
+                                    newV = 0;
+                                }
+                                data.Now = (now - newV).ToString();
+                                data.All = data.Now;
+                                data.LastS = data.NewS;
+                                data.NewS = null;
+                                await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id, data);
+                                progress.Value = 99;
+
+                            }
+                            else
+                            {
+                                data.Old = null;
+                                data.All = null;
+                                data.Now = null;
+                                data.New = null;
+                                data.Last = null;
+                                data.Note = null;
+                            }
+                            dataGrid1.Items.Refresh();
+                            dataGrid1.IsEnabled = true;
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Некорректность вводимых или хранимых данных.");
+                            dataGrid1.Items.Refresh();
+                            dataGrid1.IsEnabled = true;
+                        }
+                    }
+                    else if (data.New == null && data.NewS == null)
+                    {
+                        if (data.Name != null)
+                            if (data.Id == null)
+                            {
+                                Free_Place();
+                                if (free.Count != 0)
+                                {
+                                    data.Id = free.ElementAt(0).ToString();
+                                    progress.Value = 60;
+                                    await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + free.ElementAt(0).ToString(), data);
+                                    free.RemoveAt(0);
+                                    progress.Value = 99;
+                                }
+                                else
+                                {
+                                    int value = 0;
+                                    FirebaseResponse resp2 = await client.GetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString());
+                                    getP = resp2.ResultAs<CounterP>();
+                                    value = Convert.ToInt32(getP.cnt) + 1;
+
+                                    data.Id = value.ToString();
+                                    await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + value.ToString(), data);
+                                    progress.Value = 200;
+                                    var obj = new CounterP
+                                    {
+                                        cnt = value.ToString(),
+                                    };
+                                    await client.SetTaskAsync("Counter/nodeP/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString(), obj);
+                                    progress.Value = 99;
+                                }
+                            }
+                            else
+                            {
+                                await client.SetTaskAsync("Products/" + date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + data.Id, data);
+                                progress.Value = 99;
+                            }
                     }
                 }
                 catch (Exception ex) { MessageBox.Show(ex.Message + "(dataGrid_RowEditEnding1)"); }
