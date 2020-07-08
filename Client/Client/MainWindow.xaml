@@ -49,6 +49,11 @@
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
                             <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
@@ -57,6 +62,11 @@
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
                             <DataGridTextColumn Header="Итог" Binding="{Binding All, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
@@ -106,7 +116,7 @@
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGrid1" BorderBrush="Blue"           
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
-                  RowEditEnding="dataGrid_RowEditEnding">
+                  RowEditEnding="dataGrid1_RowEditEnding">
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.7*"/>
@@ -136,6 +146,11 @@
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
                             <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
@@ -144,6 +159,11 @@
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.HeaderStyle>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
                             <DataGridTextColumn Header="Итог" Binding="{Binding All, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
@@ -193,7 +213,7 @@
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="dataGrid2" BorderBrush="Blue"            
                   CanUserDeleteRows="False" CanUserSortColumns="True" CanUserReorderColumns="True" AutoGenerateColumns="False"
-                  RowEditEnding="dataGrid_RowEditEnding">
+                  RowEditEnding="dataGrid2_RowEditEnding">
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="0.6*"/>
@@ -223,17 +243,14 @@
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.HeaderStyle>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.13*">
-                                <DataGridTextColumn.HeaderStyle>
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Center" />
                                     </Style>
-                                </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Итог" Binding="{Binding All, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
+                            <DataGridTextColumn Header="Последнее поступление" IsReadOnly="True" Binding="{Binding Last, UpdateSourceTrigger=PropertyChanged}" Width="0.2*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -242,17 +259,11 @@
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="TextAlignment" Value="Center" />
-                                        <Setter Property="Background" Value="{Binding All, Converter={StaticResource Colors}}"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="Text" Value="">
-                                                <Setter Property="Background" Value="LightGray"/>
-                                            </Trigger>
-                                        </Style.Triggers>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Акутальный остаток" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
+                            <DataGridTextColumn Header="Всего реализовано" Binding="{Binding Now, UpdateSourceTrigger=PropertyChanged}" Width="0.1*">
                                 <DataGridTextColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
